@@ -123,7 +123,7 @@ void Malenia::Draw() {
         animation_frame = 0;
     }
 
-    if(animation_timer >= 0.14f)
+    if(animation_timer >= animation_frame_timer)
     {
         if(animation_frame == animations[animation_index].size() - 1)
         {
@@ -204,6 +204,7 @@ void MaleniaAttacking::Enter(Malenia& enemy) {
     enemy.animation_index = 6;
     enemy.animation_timer = 0.0f;
     enemy.animation_frame = 0;
+    enemy.animation_frame_timer = 0.07f;
 }
 
 // MALENIA ONLY ///////////////////////////////////////////////////////////
@@ -214,6 +215,7 @@ void MaleniaReadying2::Enter(Malenia& enemy) {
     enemy.animation_timer = 0.0f;
     enemy.animation_index = 5;
     enemy.animation_frame = 0;
+    enemy.animation_frame_timer = 0.07f;
 }
 void MaleniaAttacking2::Enter(Malenia& enemy) {
     enemy.color = VIOLET;
@@ -222,6 +224,7 @@ void MaleniaAttacking2::Enter(Malenia& enemy) {
     enemy.animation_timer = 0.0f;
     enemy.animation_index = 6;
     enemy.animation_frame = 0;
+    enemy.animation_frame_timer = 0.07f;
 
     Vector2 target;
 
@@ -441,6 +444,7 @@ void MaleniaAttacking::Update(Malenia& enemy, float delta_time) {
     float atk_duration = 0.2f;
     
     if (enemy.active_time > atk_duration) {
+        enemy.animation_frame_timer = 0.14f;
         enemy.SetState(&enemy.wandering);
     }
     else {
@@ -475,6 +479,7 @@ void MaleniaAttacking2::Update(Malenia& enemy, float delta_time) {
     float atk_duration = 0.2f;
     
     if (enemy.active_time > atk_duration) {
+        enemy.animation_frame_timer = 0.14f;
         enemy.SetState(&enemy.wandering);
     }
     else {
@@ -520,10 +525,12 @@ void MaleniaAttacking3::Update(Malenia& enemy, float delta_time) {
     if (enemy.active_time > atk_duration) {
         if(enemy.flurryCounter < 0)
         {
+            enemy.animation_frame_timer = 0.14f;
             enemy.SetState(&enemy.wandering);
         }
         else
         {
+            enemy.animation_frame_timer = 0.14f;
             enemy.SetState(&enemy.readying3);
         }
     }
