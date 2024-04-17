@@ -71,6 +71,7 @@ void CheckCollision(Malenia& enemy)
 // MALENIA
 void Malenia::Update(float delta_time) {
     previousPosition = position;
+    previous_animation_index = animation_index;
     
     current_state->Update(*this, delta_time);
 
@@ -87,15 +88,17 @@ void Malenia::Update(float delta_time) {
         color.g += 100*delta_time;
         color.b += 100*delta_time;
     }
+
+    animation_timer += delta_time;
 }
 void Malenia::Draw() {
     if(CheckCollisionPointCircle(entities -> at(0) -> position, {position.x + size.x/2, position.y + size.y/2}, detection_rad))
     {
-        DrawRectanglePro({position.x+size.x/2, position.y+size.y/2, size.x, size.y}, {size.x/2, size.y/2}, RadiansToDegrees(Vector2Angle(direction, Vector2Subtract({entities->at(0)->position}, {position.x+size.x/2, position.y+size.y/2}))), RED);
+        //DrawRectanglePro({position.x+size.x/2, position.y+size.y/2, size.x, size.y}, {size.x/2, size.y/2}, RadiansToDegrees(Vector2Angle(direction, Vector2Subtract({entities->at(0)->position}, {position.x+size.x/2, position.y+size.y/2}))), RED);
     }
     else
     {
-        DrawRectangleV(position, size, color);
+        //DrawRectangleV(position, size, color);
     }
     DrawCircleLines(position.x + size.x/2, position.y + size.y/2, detection_rad, ORANGE);
     DrawCircleLines(position.x + size.x/2, position.y + size.y/2, aggro_rad, RED);
@@ -107,6 +110,35 @@ void Malenia::Draw() {
     enemy_healthstream << std::fixed << std::setprecision(2) << hp;
     std::string enemy_health = enemy_healthstream.str();
     DrawText(enemy_health.c_str(), position.x - (MeasureText(enemy_health.c_str(), 20.0f) / 2.0f), position.y - 20.0f, 20.0f, RED);
+
+    //Draw Texture
+    Rectangle bigger_rectangle = {position.x - size.x/2, position.y - size.y/2, size.x*2, size.y*2};
+
+    // ANIMATION IMPLEMENTATION
+
+    // RESET ANIMATION WHEN CHANGING ANIMATION
+    if(animation_index != previous_animation_index)
+    {
+        animation_timer = 0.0f;
+        animation_frame = 0;
+    }
+
+    if(animation_timer >= 0.14f)
+    {
+        if(animation_frame == animations[animation_index].size() - 1)
+        {
+            animation_frame = 0;
+        }
+        else
+        {
+            animation_frame++;
+        }
+
+        animation_timer = 0.0f;
+    }
+
+    DrawTexturePro(texture, animations[animation_index][animation_frame], bigger_rectangle, {0, 0}, 0, WHITE);
+
 }
 void Malenia::SetState(MaleniaState* new_state) {
     current_state = new_state;
@@ -144,28 +176,52 @@ void MaleniaWandering::Enter(Malenia& enemy) {
     enemy.active_time = 0.0f;
     enemy.wandering_timer = enemy.RandomNumber(2.0f, 4.0f);
     enemy.direction = Vector2Normalize({enemy.RandomNumber(-1.0f, 1.0f), enemy.RandomNumber(-1.0f, 1.0f)});
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 0;
+    enemy.animation_frame = 0;
 }
 void MaleniaChasing::Enter(Malenia& enemy) {
     enemy.color = RED;
     enemy.active_time = 0.0f;
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 1;
+    enemy.animation_frame = 0;
 }
 void MaleniaReadying::Enter(Malenia& enemy) {
     enemy.color = RED;
     enemy.active_time = 0.0f;
+    
+    enemy.animation_index = 5;
+    enemy.animation_timer = 0.0f;
+    enemy.animation_frame = 0;
 }
 void MaleniaAttacking::Enter(Malenia& enemy) {
     enemy.color = VIOLET;
     enemy.active_time = 0.0f;
+    
+    enemy.animation_index = 6;
+    enemy.animation_timer = 0.0f;
+    enemy.animation_frame = 0;
 }
 
 // MALENIA ONLY ///////////////////////////////////////////////////////////
 void MaleniaReadying2::Enter(Malenia& enemy) {
     enemy.color = RED;
     enemy.active_time = 0.0f;
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 5;
+    enemy.animation_frame = 0;
 }
 void MaleniaAttacking2::Enter(Malenia& enemy) {
     enemy.color = VIOLET;
     enemy.active_time = 0.0f;
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 6;
+    enemy.animation_frame = 0;
 
     Vector2 target;
 
@@ -184,10 +240,18 @@ void MaleniaReadying3::Enter(Malenia& enemy) {
     enemy.color = RED;
     enemy.active_time = 0.0f;
     enemy.flurryCounter -= 1;
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 5;
+    enemy.animation_frame = 0;
 }
 void MaleniaAttacking3::Enter(Malenia& enemy) {
     enemy.color = VIOLET;
     enemy.active_time = 0.0f;
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 6;
+    enemy.animation_frame = 0;
 
     Vector2 target;
 
@@ -229,6 +293,32 @@ void MaleniaWandering::Update(Malenia& enemy, float delta_time) {
     {
         enemy.SetState(&enemy.wandering);
     }
+
+    if(enemy.direction.x == 0 && enemy.direction.y == 0)
+    {
+        enemy.animation_index = 0;
+    }
+    
+    if(Vector2DotProduct(enemy.direction, {1, 0}) > 0.5f)
+    {
+        enemy.animation_index = 4;
+    }
+    else if(Vector2DotProduct(enemy.direction, {1, 0}) < -0.5f)
+    {
+        enemy.animation_index = 3;
+    }
+    else
+    {
+        if(enemy.direction.y > 0)
+        {
+            enemy.animation_index = 1;
+        }
+
+        if(enemy.direction.y < 0)
+        {
+            enemy.animation_index = 2;
+        }
+    }
 }
 
 void MaleniaChasing::Update(Malenia& enemy, float delta_time) {
@@ -241,6 +331,28 @@ void MaleniaChasing::Update(Malenia& enemy, float delta_time) {
         if(enemy.entities -> at(i) -> entity_type == "Player")
         {
             enemy.direction = Vector2Normalize(Vector2Subtract(enemy.entities -> at(i) -> position, Vector2Add(enemy.position,{enemy.size.x/2, enemy.size.y/2})));
+
+
+            if(Vector2DotProduct(enemy.direction, {1, 0}) > 0.5f)
+            {
+                enemy.animation_index = 4;
+            }
+            else if(Vector2DotProduct(enemy.direction, {1, 0}) < -0.5f)
+            {
+                enemy.animation_index = 3;
+            }
+            else
+            {
+                if(enemy.direction.y > 0)
+                {
+                    enemy.animation_index = 1;
+                }
+
+                if(enemy.direction.y < 0)
+                {
+                    enemy.animation_index = 2;
+                }
+            }
  
             if(!CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.aggro_rad))
             {

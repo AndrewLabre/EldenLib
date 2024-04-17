@@ -223,9 +223,50 @@ std::vector<std::vector<Rectangle>> FillGrid(Tile* tile_list, float x_offset, fl
 }
 
 // FILE LOADERS
+std::vector<std::vector<Rectangle>> AnimationLoader(std::string animationfile)
+{
+    std::string filename = animationfile;
+    std::vector<std::vector<Rectangle>> animations;
+    std::vector<std::string> to_split;
+
+    std::string animation_count_str, frame_count_str, rectangle_str;
+    int animation_count = 0, frame_count = 0;
+
+    std::fstream MyReadFile(filename);
+        getline(MyReadFile, animation_count_str);
+        to_split = StringSplit(animation_count_str);
+        animation_count = std::stoi(to_split[1]);
+
+        for(int i = 0; i < animation_count; i++)
+        {
+            std::vector<Rectangle> new_animation;
+
+            getline(MyReadFile, frame_count_str);
+            to_split = StringSplit(frame_count_str);
+            frame_count = std::stoi(to_split[1]);
+
+            for(int j = 0; j < frame_count; j++)
+            {
+                Rectangle new_rectangle;
+                getline(MyReadFile, rectangle_str);
+                to_split = StringSplit(rectangle_str);
+
+                new_rectangle = {std::stof(to_split[0]), std::stof(to_split[1]), std::stof(to_split[2]), std::stof(to_split[3])};
+
+                new_animation.push_back(new_rectangle);
+            }
+
+            animations.push_back(new_animation);
+        }
+
+    MyReadFile.close(); 
+
+    return animations;
+}
+
 void ParseFile(std::string filename)
 {
-    std::string img, tile, grid, tile_coords, grid_coords, player_values, enemy_type_string, enemy_values;
+    std::string img, tile, grid, tile_coords, grid_coords, player_values, enemy_type_string, enemy_values, enemy_texture;
     std::vector<std::string> grid_full, tile_loc, to_split;
     int enemy_type = 0;
     
@@ -269,16 +310,32 @@ void ParseFile(std::string filename)
         if(enemy_type == 0)
         {
             Malenia* enemy = new Malenia(to_split[0], {std::stof(to_split[1]), std::stof(to_split[2])}, {std::stof(to_split[3]), std::stof(to_split[4])}, std::stof(to_split[5]), std::stof(to_split[6]), std::stof(to_split[7]), std::stof(to_split[8]), std::stof(to_split[9]), std::stof(to_split[10]), &entities);
+
+            getline(MyReadFile, enemy_texture);
+            to_split = StringSplit(enemy_texture);
+            enemy -> AssignTexture("textures/" + to_split[1]);
+            enemy -> animations = AnimationLoader("animations/malenia_animations.txt");
+
             entities.push_back(enemy);
         }
         else if (enemy_type == 1)
         {
             Amogus* enemy = new Amogus(to_split[0], {std::stof(to_split[1]), std::stof(to_split[2])}, {std::stof(to_split[3]), std::stof(to_split[4])}, std::stof(to_split[5]), std::stof(to_split[6]), std::stof(to_split[7]), std::stof(to_split[8]), std::stof(to_split[9]), std::stof(to_split[10]), &entities);
+            
+            getline(MyReadFile, enemy_texture);
+            to_split = StringSplit(enemy_texture);
+            enemy -> AssignTexture("textures/" + to_split[1]);
+
             entities.push_back(enemy);
         }
         else
         {
             Enemy* enemy = new Enemy(to_split[0], {std::stof(to_split[1]), std::stof(to_split[2])}, {std::stof(to_split[3]), std::stof(to_split[4])}, std::stof(to_split[5]), std::stof(to_split[6]), std::stof(to_split[7]), std::stof(to_split[8]), std::stof(to_split[9]), std::stof(to_split[10]), &entities);
+            
+            getline(MyReadFile, enemy_texture);
+            to_split = StringSplit(enemy_texture);
+            enemy -> AssignTexture("textures/" + to_split[1]);
+            
             entities.push_back(enemy);
         }
 
@@ -290,6 +347,8 @@ void ParseFile(std::string filename)
         //     entities.push_back(enemy);
         //     // enemy_list.push_back(enemy);
         // }
+
+        std::cout << "WORKS" << std::endl;
         
     MyReadFile.close();
 
@@ -431,6 +490,10 @@ void SaveProgress(int n_entity)
 
 
 int main() {
+    // SET WINDOW
+    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_NAME.c_str());
+    SetTargetFPS(FPS);
+    
     // LEVELS
     std::filesystem::path dirpath = "levels/";
 
@@ -481,9 +544,7 @@ int main() {
     entities.push_back(item1);
     entities.push_back(item2);
 
-    // SET WINDOW AND CAMERA
-    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_NAME.c_str());
-    SetTargetFPS(FPS);
+    // SET CAMERA
 
     int cam_type;
     Camera2D camera_view = { 0 };
@@ -690,6 +751,12 @@ int main() {
     // CLEANING
     UnloadTexture(tilesheet);
     delete[] tile_list;
+
+    for(int i=0; i<entities.size(); i++)
+    {
+        entities[i]->UnassignTexture();
+    }
+
     for(auto i=entities.begin(); i!=entities.end(); ++i)
     {
         delete *i;
