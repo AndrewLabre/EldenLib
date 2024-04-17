@@ -19,6 +19,11 @@ Vector2 VectorLerp(Vector2 v0, Vector2 v1, float t)
     return newVector;
 }
 
+int BezierRandomInt(int min, int max)
+{
+    return rand() % (max - min + 1) + min;
+}
+
 int factorial(int x)
 {
     if(x == 0)
@@ -117,7 +122,20 @@ std::vector<Vector2> ConstructAttackPath(Vector2 origin, Vector2 target)
     // GET CONTROL POINTS
     Vector2 targetDirection = Vector2Normalize(Vector2Subtract(target, origin));
 
-    Vector2 targetDirectionNormal = {-targetDirection.y, targetDirection.x};
+    Vector2 targetDirectionNormal;
+
+    int direction;
+
+    direction = BezierRandomInt(0, 1);
+
+    if(direction == 0)
+    {
+        targetDirectionNormal = {-targetDirection.y, targetDirection.x};
+    }
+    else if(direction == 1)
+    {
+        targetDirectionNormal = {targetDirection.y, -targetDirection.x};
+    }
 
     Vector2 point_a = VectorLerp(origin, target, 0.33f);
     point_a = Vector2Add(point_a, Vector2Scale(targetDirectionNormal, 100));

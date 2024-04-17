@@ -30,34 +30,38 @@ void CheckCollision(Malenia& enemy)
             }
         }
 
-        if(enemy.entities -> at(i) -> entity_type == "HP_Boost")
-        {
-            Rectangle enemy_rec_a = {enemy.position.x,
-                                    enemy.position.y,
-                                    enemy.size.x,
-                                    enemy.size.y};
-            if(CheckCollisionCircleRec(enemy.entities -> at(i) -> position, enemy.entities -> at(i) -> size.y, enemy_rec_a))
-            {
-                enemy.hp += enemy.entities -> at(i) -> hp;
-            }
-        }
+        // if(enemy.entities -> at(i) -> entity_type == "HP_Boost")
+        // {
+        //     Rectangle enemy_rec_a = {enemy.position.x,
+        //                             enemy.position.y,
+        //                             enemy.size.x,
+        //                             enemy.size.y};
+        //     if(CheckCollisionCircleRec(enemy.entities -> at(i) -> position, enemy.entities -> at(i) -> size.y, enemy_rec_a))
+        //     {
+        //         enemy.hp += enemy.entities -> at(i) -> hp;
+        //     }
+        // }
 
-        if(enemy.entities -> at(i) -> entity_type == "ATK_Boost")
-        {
-            Rectangle enemy_rec_a = {enemy.position.x,
-                                    enemy.position.y,
-                                    enemy.size.x,
-                                    enemy.size.y};
-            if(CheckCollisionCircleRec(enemy.entities -> at(i) -> position, enemy.entities -> at(i) -> size.y, enemy_rec_a))
-            {
-                enemy.basic_dmg += enemy.entities -> at(i) -> basic_dmg;
-            }
-        }
+        // if(enemy.entities -> at(i) -> entity_type == "ATK_Boost")
+        // {
+        //     Rectangle enemy_rec_a = {enemy.position.x,
+        //                             enemy.position.y,
+        //                             enemy.size.x,
+        //                             enemy.size.y};
+        //     if(CheckCollisionCircleRec(enemy.entities -> at(i) -> position, enemy.entities -> at(i) -> size.y, enemy_rec_a))
+        //     {
+        //         enemy.basic_dmg += enemy.entities -> at(i) -> basic_dmg;
+        //     }
+        // }
 
         ////////////MALENIA ONLY///////////
-        if(enemy.entities -> at(i) -> entity_type == "Player" && enemy.hp < 10000)
+        if(enemy.entities -> at(i) -> entity_type == "Player" && enemy.hp < 2000)
         {
-            enemy.hp += 10;
+            if(CheckCollisionCircleRec(enemy.entities -> at(i) -> position, enemy.entities -> at(i) -> size.y, {enemy.position.x, enemy.position.y, enemy.size.x, enemy.size.y}))
+            {
+                enemy.hp += 10;
+                std::cout << "HEAAAAAAL" << std::endl;
+            }
         }
         //////////////////////////////////////
     }
