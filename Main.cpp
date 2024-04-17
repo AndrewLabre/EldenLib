@@ -225,9 +225,9 @@ std::vector<std::vector<Rectangle>> FillGrid(Tile* tile_list, float x_offset, fl
 // FILE LOADERS
 void ParseFile(std::string filename)
 {
-    std::string img, tile, grid, tile_coords, grid_coords, player_values, enemy_count_string, enemy_values;
+    std::string img, tile, grid, tile_coords, grid_coords, player_values, enemy_type_string, enemy_values;
     std::vector<std::string> grid_full, tile_loc, to_split;
-    int enemy_count = 0;
+    int enemy_type = 0;
     
     std::fstream MyReadFile(filename);
         getline(MyReadFile, img);
@@ -259,17 +259,37 @@ void ParseFile(std::string filename)
         player1 = new Player({std::stof(to_split[0]), std::stof(to_split[1])}, std::stof(to_split[2]), std::stof(to_split[3]), std::stof(to_split[4]), std::stof(to_split[5]), std::stof(to_split[6]), &entities);
         entities.push_back(player1);
 
-        getline(MyReadFile, enemy_count_string);
-        enemy_count = std::stoi(enemy_count_string);
+        getline(MyReadFile, enemy_type_string);
+        to_split = StringSplit(enemy_type_string);
+        enemy_type = std::stoi(to_split[1]);
 
-        for(int i = 0; i < enemy_count; i++)
+        getline(MyReadFile, enemy_values);
+        to_split = StringSplit(enemy_values);
+
+        if(enemy_type == 0)
         {
-            getline(MyReadFile, enemy_values);
-            to_split = StringSplit(enemy_values);
+            Malenia* enemy = new Malenia(to_split[0], {std::stof(to_split[1]), std::stof(to_split[2])}, {std::stof(to_split[3]), std::stof(to_split[4])}, std::stof(to_split[5]), std::stof(to_split[6]), std::stof(to_split[7]), std::stof(to_split[8]), std::stof(to_split[9]), std::stof(to_split[10]), &entities);
+            entities.push_back(enemy);
+        }
+        else if (enemy_type == 1)
+        {
             Amogus* enemy = new Amogus(to_split[0], {std::stof(to_split[1]), std::stof(to_split[2])}, {std::stof(to_split[3]), std::stof(to_split[4])}, std::stof(to_split[5]), std::stof(to_split[6]), std::stof(to_split[7]), std::stof(to_split[8]), std::stof(to_split[9]), std::stof(to_split[10]), &entities);
             entities.push_back(enemy);
-            // enemy_list.push_back(enemy);
         }
+        else
+        {
+            Enemy* enemy = new Enemy(to_split[0], {std::stof(to_split[1]), std::stof(to_split[2])}, {std::stof(to_split[3]), std::stof(to_split[4])}, std::stof(to_split[5]), std::stof(to_split[6]), std::stof(to_split[7]), std::stof(to_split[8]), std::stof(to_split[9]), std::stof(to_split[10]), &entities);
+            entities.push_back(enemy);
+        }
+
+        // for(int i = 0; i < enemy_count; i++)
+        // {
+        //     getline(MyReadFile, enemy_values);
+        //     to_split = StringSplit(enemy_values);
+        //     Amogus* enemy = new Amogus(to_split[0], {std::stof(to_split[1]), std::stof(to_split[2])}, {std::stof(to_split[3]), std::stof(to_split[4])}, std::stof(to_split[5]), std::stof(to_split[6]), std::stof(to_split[7]), std::stof(to_split[8]), std::stof(to_split[9]), std::stof(to_split[10]), &entities);
+        //     entities.push_back(enemy);
+        //     // enemy_list.push_back(enemy);
+        // }
         
     MyReadFile.close();
 
