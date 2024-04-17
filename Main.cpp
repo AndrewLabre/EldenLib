@@ -562,9 +562,11 @@ int main() {
     for (int i=0; i<((int) NUM_TILES); i++) {
         tile_list[i].loc_in_sheet = {TILES[i][0], TILES[i][1], TILES[i][2], TILES[i][3]};
     }
-    tile_list[2].has_collision = true;
-    tile_list[3].has_collision = true;
-    tile_list[5].has_collision = true;
+    tile_list[10].has_collision = true;
+    tile_list[11].has_collision = true;
+    tile_list[12].has_collision = true;
+    tile_list[13].has_collision = true;
+    tile_list[14].has_collision = true;
 
     // LOAD TEXTURE
     Texture2D tilesheet = ResourceLoader();
