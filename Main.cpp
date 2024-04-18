@@ -46,6 +46,7 @@ std::vector<std::vector<float>> TILES;
 float GRID_SIZE[2];
 std::vector<std::vector<float>> GRID;
 std::vector<std::string> LEVEL_LIST;
+std::vector<int> COLLISION_TILES_INDICES;
 
 std::vector<Entity*> entities;
 std::vector<Rectangle> collision_tiles;
@@ -266,7 +267,7 @@ std::vector<std::vector<Rectangle>> AnimationLoader(std::string animationfile)
 
 void ParseFile(std::string filename)
 {
-    std::string img, tile, grid, tile_coords, grid_coords, player_values, enemy_type_string, enemy_values, enemy_texture;
+    std::string img, tile, grid, tile_coords, grid_coords, player_values, enemy_type_string, enemy_values, enemy_texture, collision_tiles_str;
     std::vector<std::string> grid_full, tile_loc, to_split;
     int enemy_type = 0;
     
@@ -292,6 +293,14 @@ void ParseFile(std::string filename)
         {
             getline(MyReadFile, grid_coords);
             grid_full.push_back(grid_coords);
+        }
+
+        // COLLISION TILE PARSING
+        getline(MyReadFile, collision_tiles_str);
+        to_split = StringSplit(collision_tiles_str);
+        for(int i = 1; i < to_split.size(); i++)
+        {
+            COLLISION_TILES_INDICES.push_back(std::stof(to_split[i]));
         }
 
         getline(MyReadFile, player_values);
@@ -562,11 +571,11 @@ int main() {
     for (int i=0; i<((int) NUM_TILES); i++) {
         tile_list[i].loc_in_sheet = {TILES[i][0], TILES[i][1], TILES[i][2], TILES[i][3]};
     }
-    tile_list[10].has_collision = true;
-    tile_list[11].has_collision = true;
-    tile_list[12].has_collision = true;
-    tile_list[13].has_collision = true;
-    tile_list[14].has_collision = true;
+
+    for(int i = 0; i < COLLISION_TILES_INDICES.size(); i++)
+    {
+        tile_list[COLLISION_TILES_INDICES[i]].has_collision = true;
+    }
 
     // LOAD TEXTURE
     Texture2D tilesheet = ResourceLoader();
