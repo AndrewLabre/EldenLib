@@ -77,22 +77,24 @@ void Amogus::Update(float delta_time) {
 
     incoming_dmg = entities -> at(0) -> basic_dmg;
 
-    if (GetState() == &readying)
-    {
-        color.r += 100*delta_time;
-        color.g += 100*delta_time;
-        color.b += 100*delta_time;
-    }
+    // if (GetState() == &readying)
+    // {
+    //     color.r += 100*delta_time;
+    //     color.g += 100*delta_time;
+    //     color.b += 100*delta_time;
+    // }
+
+    animation_timer += delta_time;
 }
 void Amogus::Draw() {
-    if(CheckCollisionPointCircle(entities -> at(0) -> position, {position.x + size.x/2, position.y + size.y/2}, detection_rad))
-    {
-        DrawRectanglePro({position.x+size.x/2, position.y+size.y/2, size.x, size.y}, {size.x/2, size.y/2}, RadiansToDegrees(Vector2Angle(direction, Vector2Subtract({entities->at(0)->position}, {position.x+size.x/2, position.y+size.y/2}))), color);
-    }
-    else
-    {
-        DrawRectangleV(position, size, color);
-    }
+    // if(CheckCollisionPointCircle(entities -> at(0) -> position, {position.x + size.x/2, position.y + size.y/2}, detection_rad))
+    // {
+    //     DrawRectanglePro({position.x+size.x/2, position.y+size.y/2, size.x, size.y}, {size.x/2, size.y/2}, RadiansToDegrees(Vector2Angle(direction, Vector2Subtract({entities->at(0)->position}, {position.x+size.x/2, position.y+size.y/2}))), color);
+    // }
+    // else
+    // {
+    //     DrawRectangleV(position, size, color);
+    // }
     // DrawCircleLines(position.x + size.x/2, position.y + size.y/2, detection_rad, ORANGE);
     // DrawCircleLines(position.x + size.x/2, position.y + size.y/2, aggro_rad, RED);
     // DrawCircleLines(position.x + size.x/2, position.y + size.y/2, attack_rad, YELLOW);
@@ -110,6 +112,35 @@ void Amogus::Draw() {
     // enemy_healthstream << std::fixed << std::setprecision(2) << hp;
     // std::string enemy_health = enemy_healthstream.str();
     // DrawText(enemy_health.c_str(), position.x - (MeasureText(enemy_health.c_str(), 20.0f) / 2.0f), position.y - 20.0f, 20.0f, RED);
+
+    //Draw Texture
+    Rectangle bigger_rectangle = {position.x - size.x/2, position.y - size.y/2, size.x*2, size.y*2};
+
+    // ANIMATION IMPLEMENTATION
+
+    // RESET ANIMATION WHEN CHANGING ANIMATION
+    if(animation_index != previous_animation_index)
+    {
+        animation_timer = 0.0f;
+        animation_frame = 0;
+    }
+
+    if(animation_timer >= animation_frame_timer)
+    {
+        if(animation_frame == animations[animation_index].size() - 1)
+        {
+            animation_frame = 0;
+        }
+        else
+        {
+            animation_frame++;
+        }
+
+        animation_timer = 0.0f;
+    }
+
+    DrawTexturePro(texture, animations[animation_index][animation_frame], bigger_rectangle, {0, 0}, 0, color);
+
 }
 void Amogus::SetState(AmogusState* new_state) {
     current_state = new_state;
@@ -143,26 +174,47 @@ Amogus::Amogus(std::string i, Vector2 pos, Vector2 s, float spd, float h, float 
 
 // STATES
 void AmogusWandering::Enter(Amogus& enemy) {
-    enemy.color = SKYBLUE;
+    enemy.color = WHITE;
     enemy.active_time = 0.0f;
     enemy.wandering_timer = enemy.RandomNumber(2.0f, 4.0f);
     enemy.direction = Vector2Normalize({enemy.RandomNumber(-1.0f, 1.0f), enemy.RandomNumber(-1.0f, 1.0f)});
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 0;
+    enemy.animation_frame = 0;
 }
 void AmogusChasing::Enter(Amogus& enemy) {
-    enemy.color = RED;
+    enemy.color = WHITE;
     enemy.active_time = 0.0f;
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 1;
+    enemy.animation_frame = 0;
 }
 void AmogusChasing2::Enter(Amogus& enemy) {
     enemy.color = Fade(enemy.color, 0.02f);
     enemy.active_time = 0.0f;
+    
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 2;
+    enemy.animation_frame = 0;
 }
 void AmogusReadying::Enter(Amogus& enemy) {
-    enemy.color = RED;
+    enemy.color = WHITE;
     enemy.active_time = 0.0f;
+
+    enemy.animation_index = 5;
+    enemy.animation_timer = 0.0f;
+    enemy.animation_frame = 0;
 }
 void AmogusAttacking::Enter(Amogus& enemy) {
-    enemy.color = VIOLET;
+    enemy.color = WHITE;
     enemy.active_time = 0.0f;
+
+    enemy.animation_index = 6;
+    enemy.animation_timer = 0.0f;
+    enemy.animation_frame = 0;
+    enemy.animation_frame_timer = 0.07f;
 }
 
 // UPDATE
@@ -178,12 +230,12 @@ void AmogusWandering::Update(Amogus& enemy, float delta_time) {
 
                 if(randomInt == 1)
                 {
-                    std::cout<<"C1"<<std::endl;
+                    std::cout<<"to chase 1"<<std::endl;
                     enemy.SetState(&enemy.chasing);
                 }
                 else
                 {
-                    std::cout<<"C2"<<std::endl;
+                    std::cout<<"to chase 2"<<std::endl;
                     enemy.SetState(&enemy.chasing2);
                 }
                 
@@ -201,6 +253,32 @@ void AmogusWandering::Update(Amogus& enemy, float delta_time) {
     if(enemy.active_time >= enemy.wandering_timer)
     {
         enemy.SetState(&enemy.wandering);
+    }
+
+    if(enemy.direction.x == 0 && enemy.direction.y == 0)
+    {
+        enemy.animation_index = 0;
+    }
+    
+    if(Vector2DotProduct(enemy.direction, {1, 0}) > 0.5f)
+    {
+        enemy.animation_index = 4;
+    }
+    else if(Vector2DotProduct(enemy.direction, {1, 0}) < -0.5f)
+    {
+        enemy.animation_index = 3;
+    }
+    else
+    {
+        if(enemy.direction.y > 0)
+        {
+            enemy.animation_index = 1;
+        }
+
+        if(enemy.direction.y < 0)
+        {
+            enemy.animation_index = 2;
+        }
     }
 }
 
@@ -254,16 +332,8 @@ void AmogusChasing2::Update(Amogus& enemy, float delta_time) {
 
             if(CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.attack_rad))
             {
-                int randomInt = enemy.RandomInt(1, 2);
-
-                if(randomInt == 1)
-                {
-                    enemy.SetState(&enemy.readying);
-                }
-                else
-                {
-                    enemy.SetState(&enemy.readying);
-                }
+                std::cout<<"to ready"<<std::endl;
+                enemy.SetState(&enemy.readying);
             }
 
             if(CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.detection_rad))
@@ -281,7 +351,7 @@ void AmogusReadying::Update(Amogus& enemy, float delta_time) {
     float readying_duration = 0.3f;
     
     if (enemy.active_time > readying_duration) {
-        enemy.color = WHITE;
+        // enemy.color = WHITE;
         for(int i = 0; i < enemy.entities -> size(); i++)
         {
             if(enemy.entities -> at(i) -> entity_type == "Player")
@@ -289,7 +359,7 @@ void AmogusReadying::Update(Amogus& enemy, float delta_time) {
                 enemy.direction = Vector2Normalize(Vector2Subtract(enemy.entities -> at(i) -> position, Vector2Add(enemy.position,{enemy.size.x/2, enemy.size.y/2})));
             }
         }
-        std::cout<<"to atking"<<std::endl;
+        std::cout<<"to attack"<<std::endl;
         enemy.SetState(&enemy.attacking);
     }
     else {
@@ -302,8 +372,9 @@ void AmogusAttacking::Update(Amogus& enemy, float delta_time) {
     float dodge_speed = 2.0f;
 
     float atk_duration = 0.2f;
-    std::cout<<"atking1"<<std::endl;
+    std::cout<<"attack"<<std::endl;
     if (enemy.active_time > atk_duration) {
+        std::cout<<"to wander"<<std::endl;
         enemy.SetState(&enemy.wandering);
     }
     else {

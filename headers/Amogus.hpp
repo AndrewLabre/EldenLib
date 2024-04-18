@@ -78,8 +78,6 @@ public:
 
     float wandering_timer = 0.0f;
 
-    float invisTimer = 0.0f;
-
     std::vector<Entity*> *entities;
 
     AmogusWandering wandering;

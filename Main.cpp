@@ -16,7 +16,7 @@
  * 
  *****************************************************************************/
 
-// g++ Main.cpp -o out -I raylib/ -L raylib/ -lraylib -lopengl32 -lgdi32 -lwinmm
+// g++ Main.cpp -o EldenLib -I raylib/ -L raylib/ -lraylib -lopengl32 -lgdi32 -lwinmm
 
 #include <raylib.h>
 #include <raymath.h>
@@ -334,6 +334,7 @@ void ParseFile(std::string filename)
             getline(MyReadFile, enemy_texture);
             to_split = StringSplit(enemy_texture);
             enemy -> AssignTexture("textures/" + to_split[1]);
+            enemy -> animations = AnimationLoader("animations/amogus_animations.txt");
 
             entities.push_back(enemy);
         }
@@ -522,7 +523,7 @@ int main() {
         std::cerr << "Directory not found" << std::endl;
     }
 
-    LevelLoader(0);
+    LevelLoader(1);
 
     // DEBUG (Input Check)
     std::cout << "Levels: " << std::endl;
