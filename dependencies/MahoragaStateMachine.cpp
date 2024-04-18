@@ -53,12 +53,10 @@ void CheckCollision(Mahoraga& enemy)
             }
         }
 
-        ////////////Mahoraga ONLY///////////
-        // if(enemy.entities -> at(i) -> entity_type == "Player" && enemy.hp < 10000)
-        // {
-        //     enemy.hp += 10;
-        // }
-        //////////////////////////////////////
+        if(enemy.entities -> at(i) -> entity_type == "Player" && enemy.hp < 5000)
+        {
+            enemy.SetState(&enemy.teleporting);
+        }
     }
 }
 
@@ -148,16 +146,16 @@ void Mahoraga::Draw() {
     {
         DrawRectangleV(position, size, color);
     }
-    // DrawCircleLines(position.x + size.x/2, position.y + size.y/2, detection_rad, ORANGE);
-    // DrawCircleLines(position.x + size.x/2, position.y + size.y/2, aggro_rad, RED);
-    // DrawCircleLines(position.x + size.x/2, position.y + size.y/2, attack_rad, YELLOW);
+    DrawCircleLines(position.x + size.x/2, position.y + size.y/2, detection_rad, ORANGE);
+    DrawCircleLines(position.x + size.x/2, position.y + size.y/2, aggro_rad, RED);
+    DrawCircleLines(position.x + size.x/2, position.y + size.y/2, attack_rad, YELLOW);
 
-    DrawText(name.c_str(), 0.0f, 0.0f, 20.0f, RED);
+    DrawText(name.c_str(), position.x - (MeasureText(name.c_str(), 20.0f) / 2.0f), position.y + size.y + 10.0f, 20.0f, RED);
 
     std::stringstream enemy_healthstream;
     enemy_healthstream << std::fixed << std::setprecision(2) << hp;
     std::string enemy_health = enemy_healthstream.str();
-    DrawText(enemy_health.c_str(), 0.0f, 20.0f, 20.0f, RED);
+    DrawText(enemy_health.c_str(), position.x - (MeasureText(enemy_health.c_str(), 20.0f) / 2.0f), position.y - 20.0f, 20.0f, RED);
 
     // DrawText(name.c_str(), position.x - (MeasureText(name.c_str(), 20.0f) / 2.0f), position.y + size.y + 10.0f, 20.0f, RED);
 
@@ -179,6 +177,21 @@ void Mahoraga::TakeDmg() {
         hp -= incoming_dmg;
         iFrameTimer = iFrames;
     }
+
+    if (current_state == &blocking)
+    {
+        if(shield > 0.0f)
+        {
+            shield -= incoming_dmg;
+        }
+        else
+        {
+            hp -= incoming_dmg/2;
+        }
+        iFrameTimer = iFrames;
+    }
+
+    SetState(&adapting);
 }
 Mahoraga::Mahoraga(std::string i, Vector2 pos, Vector2 s, float spd, float h, float dmg, float det, float agg, float atk, std::vector<Entity*>* ent) {
     name = i;
@@ -192,66 +205,80 @@ Mahoraga::Mahoraga(std::string i, Vector2 pos, Vector2 s, float spd, float h, fl
     attack_rad = atk;
     entities = ent;
     entity_type = "Enemy";
+    shield = 1000.0f;
+    og_size = s;
+    burst_rad = det;
     SetState(&idle);
 }
 
 
 // STATES
 void MahoragaIdle::Enter(Mahoraga& enemy) {
-    enemy.color = RAYWHITE;
+    std::cout << "idle" << std::endl;
+    enemy.color = WHITE;
     enemy.active_time = 0.0f;
 }
 void MahoragaWandering::Enter(Mahoraga& enemy) {
-    enemy.color = SKYBLUE;
+    std::cout << "wandering" << std::endl;
+    enemy.color = WHITE;
     enemy.active_time = 0.0f;
     enemy.wandering_timer = enemy.RandomNumber(2.0f, 4.0f);
     enemy.direction = Vector2Normalize({enemy.RandomNumber(-1.0f, 1.0f), enemy.RandomNumber(-1.0f, 1.0f)});
 }
 void MahoragaChasing::Enter(Mahoraga& enemy) {
-    enemy.color = RED;
+    std::cout << "chasing" << std::endl;
+    enemy.color = WHITE;
     enemy.active_time = 0.0f;
 }
 void MahoragaBlocking::Enter(Mahoraga& enemy) {
-    enemy.color = YELLOW
+    std::cout << "blocking" << std::endl;
+    enemy.color = WHITE;
     enemy.active_time = 0.0f;
 }
 void MahoragaAdapting::Enter(Mahoraga& enemy) {
-    enemy.color = VIOLET;
+    std::cout << "adapting" << std::endl;
+    enemy.color = WHITE;
     enemy.active_time = 0.0f;
 }
 void MahoragaTeleporting::Enter(Mahoraga& enemy) {
-    enemy.color = Fade(enemy.color, 0.02f);
+    std::cout << "teleporting" << std::endl;
+    //enemy.color = Fade(enemy.color, 0.02f);
+    enemy.color = WHITE;
     enemy.active_time = 0.0f;
 }
 void MahoragaPhase1Readying::Enter(Mahoraga& enemy) {
-    enemy.color = GREEN;
+    std::cout << "readying1" << std::endl;
+    enemy.color = WHITE;
     enemy.active_time = 0.0f;
 }
 void MahoragaPhase2Readying::Enter(Mahoraga& enemy) {
-    enemy.color = LIGHTGRAY;
+    std::cout << "readying2" << std::endl;
+    enemy.color = WHITE;
     enemy.active_time = 0.0f;
 }
 void MahoragaPhase3Readying::Enter(Mahoraga& enemy) {
-    enemy.color = LIME;
+    std::cout << "readying3" << std::endl;
+    enemy.color = WHITE;
     enemy.active_time = 0.0f;
 }
 void MahoragaPhase1Attacking::Enter(Mahoraga& enemy) {
-    enemy.color = BLUE;
+    std::cout << "attacking1" << std::endl;
+    enemy.color = WHITE;
     enemy.active_time = 0.0f;
 }
 void MahoragaPhase2Attacking::Enter(Mahoraga& enemy) {
-    enemy.color = MAGENTA;
+    std::cout << "attacking2" << std::endl;
+    enemy.color = WHITE;
     enemy.active_time = 0.0f;
 }
 void MahoragaPhase3Attacking::Enter(Mahoraga& enemy) {
-    enemy.color = PINK;
+    std::cout << "attacking3" << std::endl;
+    enemy.color = WHITE;
     enemy.active_time = 0.0f;
 }
 
 // UPDATE
 void MahoragaIdle::Update(Mahoraga& enemy, float delta_time) {
-    CheckCollision(enemy, false);
-    
     for(int i = 0; i < enemy.entities -> size(); i++)
     {
         if(enemy.entities -> at(i) -> entity_type == "Player")
@@ -271,15 +298,23 @@ void MahoragaWandering::Update(Mahoraga& enemy, float delta_time) {
         {
             if(CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.aggro_rad))
             {
-                if(enemy.hp < (enemy.hp / 2))
-                {   
-                    enemy.SetState(&enemy.readying2);
-                }
-                else
+                int randomInt = enemy.RandomInt(1, 2);
+
+                if(randomInt == 1)
                 {
-                    enemy.SetState(&enemy.chasing);
+                    enemy.SetState(&enemy.blocking);
                 }
-                
+                else if(randomInt == 2)
+                {
+                    if(enemy.hp < 5000)
+                    {   
+                        enemy.SetState(&enemy.readying2);
+                    }
+                    else
+                    {
+                        enemy.SetState(&enemy.chasing);
+                    }
+                }
             }
         }
     }
@@ -310,12 +345,26 @@ void MahoragaChasing::Update(Mahoraga& enemy, float delta_time) {
  
             if(!CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.aggro_rad))
             {
-                enemy.SetState(&enemy.wandering);
+                if(enemy.hp < 5000)
+                {
+                    enemy.SetState(&enemy.wandering);
+                }
+                else
+                {
+                    enemy.SetState(&enemy.idle);
+                }
             }
 
             if(CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.attack_rad))
             {
-                enemy.SetState(&enemy.readying);
+                if(enemy.hp < 5000)
+                {
+                    enemy.SetState(&enemy.readying2);
+                }
+                else
+                {
+                    enemy.SetState(&enemy.readying1);
+                }
             }
 
             if(CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.detection_rad))
@@ -329,52 +378,108 @@ void MahoragaChasing::Update(Mahoraga& enemy, float delta_time) {
     enemy.position = Vector2Add(enemy.position, enemy.velocity);
 }
 
-void MahoragaChasing2::Update(Mahoraga& enemy, float delta_time) {
-    enemy.velocity = Vector2Zero();
-    float chase_spd = enemy.speed;
-    float local_spd = enemy.speed * 0.5;
+void MahoragaBlocking::Update(Mahoraga& enemy, float delta_time) {
+    float blocking_duration = 1.0f;
+    
+    if (enemy.active_time > blocking_duration) {
+        for(int i = 0; i < enemy.entities -> size(); i++)
+        {
+            if(enemy.entities -> at(i) -> entity_type == "Player")
+            {
+                enemy.direction = Vector2Scale(Vector2Normalize(Vector2Subtract(enemy.entities -> at(i) -> position, Vector2Add(enemy.position,{enemy.size.x/2, enemy.size.y/2}))), -1.0f);
+            }
+        }
+        enemy.SetState(&enemy.wandering);
+    }
+    else
+    {
+        enemy.active_time += delta_time;
+    }
+}
 
+void MahoragaAdapting::Update(Mahoraga& enemy, float delta_time) {
+    float adapting_duration = 0.5f;
+    
+    if (enemy.active_time > adapting_duration) {
+        // for(int i = 0; i < enemy.entities -> size(); i++)
+        // {
+        //     if(enemy.entities -> at(i) -> entity_type == "Player")
+        //     {
+        //         enemy.direction = Vector2Scale(Vector2Normalize(Vector2Subtract(enemy.entities -> at(i) -> position, Vector2Add(enemy.position,{enemy.size.x/2, enemy.size.y/2}))), -1.0f);
+        //     }
+        // }
+
+        if(enemy.hp < 5000)
+        {
+            enemy.SetState(&enemy.wandering);
+        }
+        else
+        {
+            enemy.SetState(&enemy.idle);
+        }
+    }
+    else
+    {
+        enemy.active_time += delta_time;
+        if(enemy.hp < 5000)
+        {
+            enemy.hp += 10.0f;
+        }
+        else
+        {
+            enemy.hp += 1.0f;
+        }
+    }
+}
+
+void MahoragaTeleporting::Update(Mahoraga& enemy, float delta_time) {
     for(int i = 0; i < enemy.entities -> size(); i++)
     {
         if(enemy.entities -> at(i) -> entity_type == "Player")
         {
             enemy.direction = Vector2Normalize(Vector2Subtract(enemy.entities -> at(i) -> position, Vector2Add(enemy.position,{enemy.size.x/2, enemy.size.y/2})));
  
-            if(!CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.aggro_rad))
+            if(CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.aggro_rad))
+            {
+                enemy.position = {enemy.entities -> at(i) -> position.x + enemy.RandomNumber(-50.0f, 50.0f), enemy.entities -> at(i) -> position.y + enemy.RandomNumber(-50.0f, 50.0f)};
+                enemy.SetState(&enemy.wandering);
+            }
+            else if(!CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.aggro_rad))
             {
                 enemy.SetState(&enemy.wandering);
             }
 
             if(CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.attack_rad))
             {
-                int randomInt = enemy.RandomInt(1, 2);
+                int randomInt = enemy.RandomInt(1, 3);
 
                 if(randomInt == 1)
                 {
-                    enemy.SetState(&enemy.readying);
+                    enemy.SetState(&enemy.readying2);
                 }
-                else
+                else if(randomInt == 2)
                 {
-                    enemy.SetState(&enemy.readying);
+                    enemy.SetState(&enemy.readying3);
+                }
+                else if(randomInt == 3)
+                {
+                    enemy.SetState(&enemy.blocking);
                 }
             }
 
             if(CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.detection_rad))
             {
-                local_spd = chase_spd;
+                enemy.position = {enemy.entities -> at(i) -> position.x + enemy.RandomNumber(-50.0f, 50.0f), enemy.entities -> at(i) -> position.y + enemy.RandomNumber(-50.0f, 50.0f)};
+                enemy.SetState(&enemy.chasing);
             }
         }
     }
-
-    enemy.velocity = Vector2Add(enemy.velocity, Vector2Scale(enemy.direction, local_spd * delta_time * 1.5f));
-    enemy.position = Vector2Add(enemy.position, enemy.velocity);
 }
 
-void MahoragaReadying::Update(Mahoraga& enemy, float delta_time) {
-    float readying_duration = 0.3f;
+void MahoragaPhase1Readying::Update(Mahoraga& enemy, float delta_time) {
+    float readying_duration = 0.5f;
     
     if (enemy.active_time > readying_duration) {
-        enemy.color = WHITE;
         for(int i = 0; i < enemy.entities -> size(); i++)
         {
             if(enemy.entities -> at(i) -> entity_type == "Player")
@@ -382,26 +487,129 @@ void MahoragaReadying::Update(Mahoraga& enemy, float delta_time) {
                 enemy.direction = Vector2Normalize(Vector2Subtract(enemy.entities -> at(i) -> position, Vector2Add(enemy.position,{enemy.size.x/2, enemy.size.y/2})));
             }
         }
-        std::cout<<"to atking"<<std::endl;
-        enemy.SetState(&enemy.attacking);
+        enemy.SetState(&enemy.attacking1);
     }
     else {
         enemy.active_time += delta_time;
     }
 }
 
-void MahoragaAttacking::Update(Mahoraga& enemy, float delta_time) {
+void MahoragaPhase2Readying::Update(Mahoraga& enemy, float delta_time) {
+    float readying_duration = 0.8f;
+    
+    if (enemy.active_time > readying_duration) {
+        for(int i = 0; i < enemy.entities -> size(); i++)
+        {
+            if(enemy.entities -> at(i) -> entity_type == "Player")
+            {
+                enemy.direction = Vector2Normalize(Vector2Subtract(enemy.entities -> at(i) -> position, Vector2Add(enemy.position,{enemy.size.x/2, enemy.size.y/2})));
+            }
+        }
+        enemy.SetState(&enemy.attacking2);
+    }
+    else {
+        enemy.active_time += delta_time;
+        enemy.color.r += 1000*delta_time;
+    }
+}
+
+void MahoragaPhase3Readying::Update(Mahoraga& enemy, float delta_time) {
+    float readying_duration = 0.2f;
+    
+    if (enemy.active_time > readying_duration) {
+        for(int i = 0; i < enemy.entities -> size(); i++)
+        {
+            if(enemy.entities -> at(i) -> entity_type == "Player")
+            {
+                enemy.direction = Vector2Normalize(Vector2Subtract(enemy.entities -> at(i) -> position, Vector2Add(enemy.position,{enemy.size.x/2, enemy.size.y/2})));
+            }
+        }
+        enemy.SetState(&enemy.attacking3);
+    }
+    else {
+        enemy.active_time += delta_time;
+    }
+}
+
+void MahoragaPhase1Attacking::Update(Mahoraga& enemy, float delta_time) {
     float dodge_duration = 0.15f;
     float dodge_speed = 2.0f;
 
     float atk_duration = 0.2f;
-    std::cout<<"atking1"<<std::endl;
+
     if (enemy.active_time > atk_duration) {
-        enemy.SetState(&enemy.wandering);
+        enemy.SetState(&enemy.idle);
     }
     else {
         enemy.active_time += delta_time;
         enemy.velocity = Vector2Add(enemy.velocity, Vector2Scale(enemy.direction, dodge_speed * enemy.speed * delta_time));
         enemy.position = Vector2Add(enemy.position, enemy.velocity);
+    }
+}
+
+void MahoragaPhase2Attacking::Update(Mahoraga& enemy, float delta_time) {
+    float atk_duration = 0.5f;
+    
+    if (enemy.active_time > atk_duration) {
+        enemy.size = enemy.og_size;
+        enemy.animation_frame_timer = 0.14f;
+        int randomInt = enemy.RandomInt(1, 2);
+        if(randomInt == 1)
+        {
+            enemy.SetState(&enemy.teleporting);
+        }
+        else if(randomInt == 2)
+        {
+            enemy.SetState(&enemy.wandering);
+        }
+    }
+    else {
+        enemy.active_time += delta_time;
+        enemy.size.x += 10.0f;
+        enemy.size.y += 10.0f;
+    }
+}
+
+void MahoragaPhase3Attacking::Update(Mahoraga& enemy, float delta_time) {
+    float atk_duration = 1.0f;
+
+    Vector2 target;
+
+    for(int i = 0; i < enemy.entities -> size(); i++)
+    {
+        if(enemy.entities -> at(i) -> entity_type == "Player")
+        {
+            target = enemy.entities -> at(i) -> position;
+        }
+    }
+
+    enemy.attackPath = ConstructAttackPath(enemy.position, target);
+    
+    if (enemy.active_time > atk_duration) {
+        int randomInt = enemy.RandomInt(1, 5);
+        if(randomInt == 1)
+        {
+            enemy.SetState(&enemy.teleporting);
+        }
+        else if(randomInt == 2)
+        {
+            enemy.SetState(&enemy.wandering);
+        }
+        else if(randomInt == 3)
+        {
+            enemy.SetState(&enemy.readying3);
+        }
+        else if(randomInt == 4)
+        {
+            enemy.SetState(&enemy.attacking3);
+        }
+        else if(randomInt == 5)
+        {
+            enemy.SetState(&enemy.blocking);
+        }
+    }
+    else {
+        enemy.active_time += delta_time;
+        enemy.position = ReturnPointOverTime(enemy.active_time, atk_duration, enemy.attackPath);
     }
 }

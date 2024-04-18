@@ -132,6 +132,7 @@ public:
     std::vector<Vector2> attackPath;
     float burst_rad;
     float shield;
+    Vector2 og_size;
 
     Mahoraga(std::string id, Vector2 pos, Vector2 size, float spd, float hp, float basic_dmg, float det, float agg, float atk, std::vector<Entity*>* ent);
 

@@ -32,6 +32,7 @@
 #include "dependencies/ATK_ItemStateMachine.cpp"
 #include "dependencies/MaleniaStateMachine.cpp"
 #include "dependencies/AmogusStateMachine.cpp"
+#include "dependencies/MahoragaStateMachine.cpp"
 
 
 // GLOBALS
@@ -338,6 +339,17 @@ void ParseFile(std::string filename)
 
             entities.push_back(enemy);
         }
+        else if (enemy_type == 2)
+        {
+            Mahoraga* enemy = new Mahoraga(to_split[0], {std::stof(to_split[1]), std::stof(to_split[2])}, {std::stof(to_split[3]), std::stof(to_split[4])}, std::stof(to_split[5]), std::stof(to_split[6]), std::stof(to_split[7]), std::stof(to_split[8]), std::stof(to_split[9]), std::stof(to_split[10]), &entities);
+            
+            getline(MyReadFile, enemy_texture);
+            to_split = StringSplit(enemy_texture);
+            enemy -> AssignTexture("textures/" + to_split[1]);
+            enemy -> animations = AnimationLoader("animations/amogus_animations.txt");
+
+            entities.push_back(enemy);
+        }
         else
         {
             Enemy* enemy = new Enemy(to_split[0], {std::stof(to_split[1]), std::stof(to_split[2])}, {std::stof(to_split[3]), std::stof(to_split[4])}, std::stof(to_split[5]), std::stof(to_split[6]), std::stof(to_split[7]), std::stof(to_split[8]), std::stof(to_split[9]), std::stof(to_split[10]), &entities);
@@ -523,7 +535,7 @@ int main() {
         std::cerr << "Directory not found" << std::endl;
     }
 
-    LevelLoader(1);
+    LevelLoader(2);
 
     // DEBUG (Input Check)
     std::cout << "Levels: " << std::endl;
