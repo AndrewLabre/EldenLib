@@ -163,6 +163,35 @@ void Mahoraga::Draw() {
     // enemy_healthstream << std::fixed << std::setprecision(2) << hp;
     // std::string enemy_health = enemy_healthstream.str();
     // DrawText(enemy_health.c_str(), position.x - (MeasureText(enemy_health.c_str(), 20.0f) / 2.0f), position.y - 20.0f, 20.0f, RED);
+
+    //Draw Texture
+    Rectangle bigger_rectangle = {position.x - size.x/2, position.y - size.y/2, size.x*2, size.y*2};
+
+    // ANIMATION IMPLEMENTATION
+
+    // RESET ANIMATION WHEN CHANGING ANIMATION
+    if(animation_index != previous_animation_index)
+    {
+        animation_timer = 0.0f;
+        animation_frame = 0;
+    }
+
+    if(animation_timer >= animation_frame_timer)
+    {
+        if(animation_frame == animations[animation_index].size() - 1)
+        {
+            animation_frame = 0;
+        }
+        else
+        {
+            animation_frame++;
+        }
+
+        animation_timer = 0.0f;
+    }
+
+    DrawTexturePro(texture, animations[animation_index][animation_frame], bigger_rectangle, {0, 0}, 0, WHITE);
+    
 }
 void Mahoraga::SetState(MahoragaState* new_state) {
     current_state = new_state;
