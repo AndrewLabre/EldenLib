@@ -346,7 +346,7 @@ void ParseFile(std::string filename)
             getline(MyReadFile, enemy_texture);
             to_split = StringSplit(enemy_texture);
             enemy -> AssignTexture("textures/" + to_split[1]);
-            enemy -> animations = AnimationLoader("animations/amogus_animations.txt");
+            enemy -> animations = AnimationLoader("animations/mahoraga_animations.txt");
 
             entities.push_back(enemy);
         }

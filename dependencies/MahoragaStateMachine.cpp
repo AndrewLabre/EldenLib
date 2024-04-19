@@ -140,29 +140,22 @@ void Mahoraga::Update(float delta_time) {
 void Mahoraga::Draw() {
     if(CheckCollisionPointCircle(entities -> at(0) -> position, {position.x + size.x/2, position.y + size.y/2}, detection_rad))
     {
-        DrawRectanglePro({position.x+size.x/2, position.y+size.y/2, size.x, size.y}, {size.x/2, size.y/2}, RadiansToDegrees(Vector2Angle(direction, Vector2Subtract({entities->at(0)->position}, {position.x+size.x/2, position.y+size.y/2}))), color);
+        //DrawRectanglePro({position.x+size.x/2, position.y+size.y/2, size.x, size.y}, {size.x/2, size.y/2}, RadiansToDegrees(Vector2Angle(direction, Vector2Subtract({entities->at(0)->position}, {position.x+size.x/2, position.y+size.y/2}))), color);
     }
     else
     {
-        DrawRectangleV(position, size, color);
+        //DrawRectangleV(position, size, color);
     }
     DrawCircleLines(position.x + size.x/2, position.y + size.y/2, detection_rad, ORANGE);
     DrawCircleLines(position.x + size.x/2, position.y + size.y/2, aggro_rad, RED);
     DrawCircleLines(position.x + size.x/2, position.y + size.y/2, attack_rad, YELLOW);
 
-    DrawText(name.c_str(), position.x - (MeasureText(name.c_str(), 20.0f) / 2.0f), position.y + size.y + 10.0f, 20.0f, RED);
+    DrawText(name.c_str(), position.x - (MeasureText(name.c_str(), 20.0f) / 2.0f), position.y + size.y + 20.0f, 20.0f, RED);
 
     std::stringstream enemy_healthstream;
     enemy_healthstream << std::fixed << std::setprecision(2) << hp;
     std::string enemy_health = enemy_healthstream.str();
     DrawText(enemy_health.c_str(), position.x - (MeasureText(enemy_health.c_str(), 20.0f) / 2.0f), position.y - 20.0f, 20.0f, RED);
-
-    // DrawText(name.c_str(), position.x - (MeasureText(name.c_str(), 20.0f) / 2.0f), position.y + size.y + 10.0f, 20.0f, RED);
-
-    // std::stringstream enemy_healthstream;
-    // enemy_healthstream << std::fixed << std::setprecision(2) << hp;
-    // std::string enemy_health = enemy_healthstream.str();
-    // DrawText(enemy_health.c_str(), position.x - (MeasureText(enemy_health.c_str(), 20.0f) / 2.0f), position.y - 20.0f, 20.0f, RED);
 
     //Draw Texture
     Rectangle bigger_rectangle = {position.x - size.x/2, position.y - size.y/2, size.x*2, size.y*2};
@@ -246,6 +239,10 @@ void MahoragaIdle::Enter(Mahoraga& enemy) {
     std::cout << "idle" << std::endl;
     enemy.color = WHITE;
     enemy.active_time = 0.0f;
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 0;
+    enemy.animation_frame = 0;
 }
 void MahoragaWandering::Enter(Mahoraga& enemy) {
     std::cout << "wandering" << std::endl;
@@ -253,57 +250,102 @@ void MahoragaWandering::Enter(Mahoraga& enemy) {
     enemy.active_time = 0.0f;
     enemy.wandering_timer = enemy.RandomNumber(2.0f, 4.0f);
     enemy.direction = Vector2Normalize({enemy.RandomNumber(-1.0f, 1.0f), enemy.RandomNumber(-1.0f, 1.0f)});
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 1;
+    enemy.animation_frame = 0;
 }
 void MahoragaChasing::Enter(Mahoraga& enemy) {
     std::cout << "chasing" << std::endl;
     enemy.color = WHITE;
     enemy.active_time = 0.0f;
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 1;
+    enemy.animation_frame = 0;
 }
 void MahoragaBlocking::Enter(Mahoraga& enemy) {
     std::cout << "blocking" << std::endl;
     enemy.color = WHITE;
     enemy.active_time = 0.0f;
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 0;
+    enemy.animation_frame = 0;
 }
 void MahoragaAdapting::Enter(Mahoraga& enemy) {
     std::cout << "adapting" << std::endl;
     enemy.color = WHITE;
     enemy.active_time = 0.0f;
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 0;
+    enemy.animation_frame = 0;
 }
 void MahoragaTeleporting::Enter(Mahoraga& enemy) {
     std::cout << "teleporting" << std::endl;
-    //enemy.color = Fade(enemy.color, 0.02f);
-    enemy.color = WHITE;
+    enemy.color = Fade(enemy.color, 0.02f);
+    //enemy.color = WHITE;
     enemy.active_time = 0.0f;
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 0;
+    enemy.animation_frame = 0;
 }
 void MahoragaPhase1Readying::Enter(Mahoraga& enemy) {
     std::cout << "readying1" << std::endl;
     enemy.color = WHITE;
     enemy.active_time = 0.0f;
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 5;
+    enemy.animation_frame = 0;
 }
 void MahoragaPhase2Readying::Enter(Mahoraga& enemy) {
     std::cout << "readying2" << std::endl;
     enemy.color = WHITE;
     enemy.active_time = 0.0f;
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 5;
+    enemy.animation_frame = 0;
 }
 void MahoragaPhase3Readying::Enter(Mahoraga& enemy) {
     std::cout << "readying3" << std::endl;
     enemy.color = WHITE;
     enemy.active_time = 0.0f;
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 5;
+    enemy.animation_frame = 0;
 }
 void MahoragaPhase1Attacking::Enter(Mahoraga& enemy) {
     std::cout << "attacking1" << std::endl;
     enemy.color = WHITE;
     enemy.active_time = 0.0f;
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 6;
+    enemy.animation_frame = 0;
+    enemy.animation_frame_timer = 0.07f;
 }
 void MahoragaPhase2Attacking::Enter(Mahoraga& enemy) {
     std::cout << "attacking2" << std::endl;
     enemy.color = WHITE;
     enemy.active_time = 0.0f;
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 6;
+    enemy.animation_frame = 0;
 }
 void MahoragaPhase3Attacking::Enter(Mahoraga& enemy) {
     std::cout << "attacking3" << std::endl;
     enemy.color = WHITE;
     enemy.active_time = 0.0f;
+
+    enemy.animation_timer = 0.0f;
+    enemy.animation_index = 6;
+    enemy.animation_frame = 0;
 }
 
 // UPDATE
@@ -359,6 +401,31 @@ void MahoragaWandering::Update(Mahoraga& enemy, float delta_time) {
     {
         enemy.SetState(&enemy.wandering);
     }
+    if(enemy.direction.x == 0 && enemy.direction.y == 0)
+    {
+        enemy.animation_index = 0;
+    }
+    
+    if(Vector2DotProduct(enemy.direction, {1, 0}) > 0.5f)
+    {
+        enemy.animation_index = 4;
+    }
+    else if(Vector2DotProduct(enemy.direction, {1, 0}) < -0.5f)
+    {
+        enemy.animation_index = 3;
+    }
+    else
+    {
+        if(enemy.direction.y > 0)
+        {
+            enemy.animation_index = 1;
+        }
+
+        if(enemy.direction.y < 0)
+        {
+            enemy.animation_index = 2;
+        }
+    }
 }
 
 void MahoragaChasing::Update(Mahoraga& enemy, float delta_time) {
@@ -371,7 +438,28 @@ void MahoragaChasing::Update(Mahoraga& enemy, float delta_time) {
         if(enemy.entities -> at(i) -> entity_type == "Player")
         {
             enemy.direction = Vector2Normalize(Vector2Subtract(enemy.entities -> at(i) -> position, Vector2Add(enemy.position,{enemy.size.x/2, enemy.size.y/2})));
- 
+
+            if(Vector2DotProduct(enemy.direction, {1, 0}) > 0.5f)
+            {
+                enemy.animation_index = 4;
+            }
+            else if(Vector2DotProduct(enemy.direction, {1, 0}) < -0.5f)
+            {
+                enemy.animation_index = 3;
+            }
+            else
+            {
+                if(enemy.direction.y > 0)
+                {
+                    enemy.animation_index = 1;
+                }
+
+                if(enemy.direction.y < 0)
+                {
+                    enemy.animation_index = 2;
+                }
+            }
+
             if(!CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.aggro_rad))
             {
                 if(enemy.hp < 5000)
@@ -567,6 +655,7 @@ void MahoragaPhase1Attacking::Update(Mahoraga& enemy, float delta_time) {
     float atk_duration = 0.2f;
 
     if (enemy.active_time > atk_duration) {
+        enemy.animation_frame_timer = 0.14f;
         enemy.SetState(&enemy.idle);
     }
     else {
@@ -616,6 +705,7 @@ void MahoragaPhase3Attacking::Update(Mahoraga& enemy, float delta_time) {
     
     if (enemy.active_time > atk_duration) {
         int randomInt = enemy.RandomInt(1, 5);
+        enemy.animation_frame_timer = 0.14f;
         if(randomInt == 1)
         {
             enemy.SetState(&enemy.teleporting);
