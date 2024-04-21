@@ -1,3 +1,61 @@
+// 布瑠部由良由良 八握剣異戒神将魔虚羅
+// 
+//                       #####         ##***##                                                         
+//                     ##*****##      #*******#                                                        
+//                     #*******#%     #*******##                                                       
+//                     #*******#%     %*******#           #####                                        
+//                   #********###***############%%       #******%                                      
+//                  ##*****#%%%#***###*########**#***## %*******#                                      
+//                  ##*****####**#########*####*#%####*###*****#%                                      
+//                 %##********#########*#######**#*#**%####**##     ####%                              
+//                 %#****************************##########***#*####*****#                             
+//            ########****##*********************##%**###%###*####********%                            
+//           ##************##***#********************%####*##**#####*****#                             
+//            %#****##**#*#***#*********######***#**#***************%%%%                               
+//               %#*****##**##*****###****#######**###******##*********########%%                      
+//                #**###*******#******###**#****#**#*#%#######***#******##********#%                   
+//               %%#*#########******************#*******#**#*#####*******###********##                 
+//             #####*#***#####**#####****##***********#********####********##********##                
+//             %%####*****##**#*************#****##**********#****##**********#*******##               
+//                  %#*#####**#********************##*********#******########**********#               
+//                  %######**#*****#******##*****#*******##*******######****###********##              
+//                  %#*******************#####***********#*********#*#*******##********##%             
+//                   ##*******##****************###**#####*********#************#***#***#%             
+//                    %##########*******#%#***####******###******####************##****##              
+//                    %#***####*******#%###****#******************#%%%%#***********#***#               
+//                    ##*****#******#%%%#**********#****************#% ###**********##%                
+//                    %#****##%#*##%%%#%#**********#*****************#   %####********##               
+//                    %%##***##%%%%%%%#*##****************************#    %#**********##%             
+//                   ###******#####%#####******##***#*********#*******#       %#*********#%%           
+//                   ##*****##**#  %%  %%%%#**************************#          ##*******#%%          
+//                  ##********##            ###**#****#***************#            %#******##%         
+//                 #********##%                ##*#**##***************%            %##***##**#%%       
+//               %##*##***###%                 %#****************##**#              %%%#*******##      
+//              %%#******##%                   ######*************###%                %******##*#%     
+//              ##******##*#                 %########*#*#*********##                  %#*#*#*****####%
+//              ##*****##*#                  %##**####%****###****###%%                 ####****##**## 
+//             %#*****##*#                   %#**#***********#%%%%@@@@@                 ###***#%**#%%  
+//            %#*******#%                 @@%##**#%%%%%%%%@@@@@@@@@@@@@@                #*#*##*#%#*#%%%
+//            ##*****##%                 %@%#*#%%@@@@@@@@@@@@@@@@@@@@@@@@               %%%**##*#%%%#%%
+//           %#******#                  @%#%%%@@@@@@@@@@%@@@@@@%%%@@@@@@@@@@%              #%%%%####%  
+//          %%#**####                  %@%%@@@@@@@@@@@%%@@@@@@%%%@@%%%%%%%@@@                    %%%%  
+//          ########                @@@@@@@@@@@@@@@%%%@@@@@@%%%@@%%%%%%@@@@@@                          
+//        ########*%            @@%%%@@@@@@@@@@@@%%%@@@@@@@%%%@@@@@@@@@@@@@@@@                         
+//      %#*****#**#%          %%%%%@@@@@@@@@@@@%%%@@@@@@@%%%%@@@@@@@@@@@@@@@@@@                        
+//      ***##%##**#        %%%%%@@@@@@@@@@@@@%#%%@@@@@@@%#%@@@@@@@@@@%%%%@@@@@@@@%                     
+//     %#**#####%%      %%%%%@@@@@@@@@@@@@@%#%%@@@@@@@@##%@@@@@@@@@@@@@%%%%@@@@@@@@@@@                 
+//      ###**#***%    %%#%%%%%%%@@@@@@@@@%%%@@@@@@@@@@%#@@@@@@@@@@@@@@@@@%%%@@@@@@@@%                  
+//      #*######    %%%%%%%%%@@@@@@@%%@@%%%@@@@%%@@@@@#%@@@@%@@@@@@@@@@%%%@%%@@@@@@@%                  
+//     #***#**#    @%%%@@@@@@@@@@@%%%@@@%%@@@@%%%@@@@@%@@@@%%@@@@@@@%%%%@@%%@%%@@@@@                   
+//     #*****#    @@@%@@@@@@@@@@%%%%@@@@@@@@@%%%@@@@@%@@@@%%%@@@@@%%%@@@@%%%@%%@@@@@@@                 
+//    #***#**%   %%@@@@@@@%%%%%%%%@@@@@@@@@@%#%@@@@@@@@@@@%%@@@@@@@@@@@@%%%@%%%@@@@@@@@@               
+//    #*****#  @@@@@@@@@@%%%@@@@@@@@@@@@@@@%%%%@@@@@@@@@%%#%@@@@@@@@@@@%%%%@%%@@@@@@@@%%               
+//    #****#   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%%%@@@@@@@@@@@@%%%@@@@@@@@@@@%#*#              
+//   #***##     %@@@@@@@@@@@%%%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%####%#***##            
+//  %*****%       %%%####******####%%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%###**********##           
+//  #****#         %#*##********####%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  @@%###*************#%         
+// %****#          %#*************#%  @@@@%@@@@@@@@@@@@@@@@@@@@@@@@@%        %##**##*********#%        
+
 #include <raylib.h>
 #include <raymath.h>
 #include <vector>
@@ -60,66 +118,9 @@ void CheckCollision(Mahoraga& enemy)
     }
 }
 
-
-// 布瑠部由良由良 八握剣異戒神将魔虚羅
-// 
-//                       #####         ##***##                                                         
-//                     ##*****##      #*******#                                                        
-//                     #*******#%     #*******##                                                       
-//                     #*******#%     %*******#           #####                                        
-//                   #********###***############%%       #******%                                      
-//                  ##*****#%%%#***###*########**#***## %*******#                                      
-//                  ##*****####**#########*####*#%####*###*****#%                                      
-//                 %##********#########*#######**#*#**%####**##     ####%                              
-//                 %#****************************##########***#*####*****#                             
-//            ########****##*********************##%**###%###*####********%                            
-//           ##************##***#********************%####*##**#####*****#                             
-//            %#****##**#*#***#*********######***#**#***************%%%%                               
-//               %#*****##**##*****###****#######**###******##*********########%%                      
-//                #**###*******#******###**#****#**#*#%#######***#******##********#%                   
-//               %%#*#########******************#*******#**#*#####*******###********##                 
-//             #####*#***#####**#####****##***********#********####********##********##                
-//             %%####*****##**#*************#****##**********#****##**********#*******##               
-//                  %#*#####**#********************##*********#******########**********#               
-//                  %######**#*****#******##*****#*******##*******######****###********##              
-//                  %#*******************#####***********#*********#*#*******##********##%             
-//                   ##*******##****************###**#####*********#************#***#***#%             
-//                    %##########*******#%#***####******###******####************##****##              
-//                    %#***####*******#%###****#******************#%%%%#***********#***#               
-//                    ##*****#******#%%%#**********#****************#% ###**********##%                
-//                    %#****##%#*##%%%#%#**********#*****************#   %####********##               
-//                    %%##***##%%%%%%%#*##****************************#    %#**********##%             
-//                   ###******#####%#####******##***#*********#*******#       %#*********#%%           
-//                   ##*****##**#  %%  %%%%#**************************#          ##*******#%%          
-//                  ##********##            ###**#****#***************#            %#******##%         
-//                 #********##%                ##*#**##***************%            %##***##**#%%       
-//               %##*##***###%                 %#****************##**#              %%%#*******##      
-//              %%#******##%                   ######*************###%                %******##*#%     
-//              ##******##*#                 %########*#*#*********##                  %#*#*#*****####%
-//              ##*****##*#                  %##**####%****###****###%%                 ####****##**## 
-//             %#*****##*#                   %#**#***********#%%%%@@@@@                 ###***#%**#%%  
-//            %#*******#%                 @@%##**#%%%%%%%%@@@@@@@@@@@@@@                #*#*##*#%#*#%%%
-//            ##*****##%                 %@%#*#%%@@@@@@@@@@@@@@@@@@@@@@@@               %%%**##*#%%%#%%
-//           %#******#                  @%#%%%@@@@@@@@@@%@@@@@@%%%@@@@@@@@@@%              #%%%%####%  
-//          %%#**####                  %@%%@@@@@@@@@@@%%@@@@@@%%%@@%%%%%%%@@@                    %%%%  
-//          ########                @@@@@@@@@@@@@@@%%%@@@@@@%%%@@%%%%%%@@@@@@                          
-//        ########*%            @@%%%@@@@@@@@@@@@%%%@@@@@@@%%%@@@@@@@@@@@@@@@@                         
-//      %#*****#**#%          %%%%%@@@@@@@@@@@@%%%@@@@@@@%%%%@@@@@@@@@@@@@@@@@@                        
-//      ***##%##**#        %%%%%@@@@@@@@@@@@@%#%%@@@@@@@%#%@@@@@@@@@@%%%%@@@@@@@@%                     
-//     %#**#####%%      %%%%%@@@@@@@@@@@@@@%#%%@@@@@@@@##%@@@@@@@@@@@@@%%%%@@@@@@@@@@@                 
-//      ###**#***%    %%#%%%%%%%@@@@@@@@@%%%@@@@@@@@@@%#@@@@@@@@@@@@@@@@@%%%@@@@@@@@%                  
-//      #*######    %%%%%%%%%@@@@@@@%%@@%%%@@@@%%@@@@@#%@@@@%@@@@@@@@@@%%%@%%@@@@@@@%                  
-//     #***#**#    @%%%@@@@@@@@@@@%%%@@@%%@@@@%%%@@@@@%@@@@%%@@@@@@@%%%%@@%%@%%@@@@@                   
-//     #*****#    @@@%@@@@@@@@@@%%%%@@@@@@@@@%%%@@@@@%@@@@%%%@@@@@%%%@@@@%%%@%%@@@@@@@                 
-//    #***#**%   %%@@@@@@@%%%%%%%%@@@@@@@@@@%#%@@@@@@@@@@@%%@@@@@@@@@@@@%%%@%%%@@@@@@@@@               
-//    #*****#  @@@@@@@@@@%%%@@@@@@@@@@@@@@@%%%%@@@@@@@@@%%#%@@@@@@@@@@@%%%%@%%@@@@@@@@%%               
-//    #****#   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%%%%@@@@@@@@@@@@%%%@@@@@@@@@@@%#*#              
-//   #***##     %@@@@@@@@@@@%%%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%####%#***##            
-//  %*****%       %%%####******####%%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%%###**********##           
-//  #****#         %#*##********####%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  @@%###*************#%         
-// %****#          %#*************#%  @@@@%@@@@@@@@@@@@@@@@@@@@@@@@@%        %##**##*********#%        
 void Mahoraga::Update(float delta_time) {
     previousPosition = position;
+    previous_animation_index = animation_index;
     
     current_state->Update(*this, delta_time);
 
@@ -136,6 +137,8 @@ void Mahoraga::Update(float delta_time) {
         color.g += 100*delta_time;
         color.b += 100*delta_time;
     }
+
+    animation_timer += delta_time;
 }
 void Mahoraga::Draw() {
     if(CheckCollisionPointCircle(entities -> at(0) -> position, {position.x + size.x/2, position.y + size.y/2}, detection_rad))
@@ -270,8 +273,8 @@ void MahoragaBlocking::Enter(Mahoraga& enemy) {
     enemy.active_time = 0.0f;
 
     enemy.animation_timer = 0.0f;
-    enemy.animation_index = 0;
-    enemy.animation_frame = 0;
+    enemy.animation_index = 6;
+    enemy.animation_frame = 3;
 }
 void MahoragaAdapting::Enter(Mahoraga& enemy) {
     std::cout << "adapting" << std::endl;
@@ -279,8 +282,8 @@ void MahoragaAdapting::Enter(Mahoraga& enemy) {
     enemy.active_time = 0.0f;
 
     enemy.animation_timer = 0.0f;
-    enemy.animation_index = 0;
-    enemy.animation_frame = 0;
+    enemy.animation_index = 6;
+    enemy.animation_frame = 2;
 }
 void MahoragaTeleporting::Enter(Mahoraga& enemy) {
     std::cout << "teleporting" << std::endl;
@@ -289,7 +292,7 @@ void MahoragaTeleporting::Enter(Mahoraga& enemy) {
     enemy.active_time = 0.0f;
 
     enemy.animation_timer = 0.0f;
-    enemy.animation_index = 0;
+    enemy.animation_index = 5;
     enemy.animation_frame = 0;
 }
 void MahoragaPhase1Readying::Enter(Mahoraga& enemy) {
@@ -307,7 +310,7 @@ void MahoragaPhase2Readying::Enter(Mahoraga& enemy) {
     enemy.active_time = 0.0f;
 
     enemy.animation_timer = 0.0f;
-    enemy.animation_index = 5;
+    enemy.animation_index = 6;
     enemy.animation_frame = 0;
 }
 void MahoragaPhase3Readying::Enter(Mahoraga& enemy) {
@@ -354,7 +357,16 @@ void MahoragaIdle::Update(Mahoraga& enemy, float delta_time) {
     {
         if(enemy.entities -> at(i) -> entity_type == "Player")
         {
-            if(CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.aggro_rad))
+            if(enemy.direction.y > 0)
+            {
+                enemy.animation_frame= 1;
+            }
+
+            if(enemy.direction.y < 0)
+            {
+                enemy.animation_frame = 0;
+            }
+                if(CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.aggro_rad))
             {
                 enemy.SetState(&enemy.chasing);             
             }
@@ -362,34 +374,6 @@ void MahoragaIdle::Update(Mahoraga& enemy, float delta_time) {
     }
 }
 void MahoragaWandering::Update(Mahoraga& enemy, float delta_time) {
-
-    for(int i = 0; i < enemy.entities -> size(); i++)
-    {
-        if(enemy.entities -> at(i) -> entity_type == "Player")
-        {
-            if(CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.aggro_rad))
-            {
-                int randomInt = enemy.RandomInt(1, 2);
-
-                if(randomInt == 1)
-                {
-                    enemy.SetState(&enemy.blocking);
-                }
-                else if(randomInt == 2)
-                {
-                    if(enemy.hp < 5000)
-                    {   
-                        enemy.SetState(&enemy.readying2);
-                    }
-                    else
-                    {
-                        enemy.SetState(&enemy.chasing);
-                    }
-                }
-            }
-        }
-    }
-
     enemy.velocity = Vector2Zero();
 
     enemy.velocity = Vector2Add(enemy.velocity, Vector2Scale(enemy.direction, enemy.speed * delta_time));
@@ -424,6 +408,17 @@ void MahoragaWandering::Update(Mahoraga& enemy, float delta_time) {
         if(enemy.direction.y < 0)
         {
             enemy.animation_index = 2;
+        }
+    }
+
+    for(int i = 0; i < enemy.entities -> size(); i++)
+    {
+        if(enemy.entities -> at(i) -> entity_type == "Player")
+        {
+            if(CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.aggro_rad))
+            {
+                enemy.SetState(&enemy.chasing);
+            }
         }
     }
 }
@@ -476,7 +471,7 @@ void MahoragaChasing::Update(Mahoraga& enemy, float delta_time) {
             {
                 if(enemy.hp < 5000)
                 {
-                    enemy.SetState(&enemy.readying2);
+                    enemy.SetState(&enemy.readying3);
                 }
                 else
                 {
@@ -487,6 +482,11 @@ void MahoragaChasing::Update(Mahoraga& enemy, float delta_time) {
             if(CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.detection_rad))
             {
                 local_spd = chase_spd;
+
+                if(enemy.hp < 5000)
+                {
+                    enemy.SetState(&enemy.readying2);
+                }
             }
         }
     }
@@ -518,14 +518,6 @@ void MahoragaAdapting::Update(Mahoraga& enemy, float delta_time) {
     float adapting_duration = 0.5f;
     
     if (enemy.active_time > adapting_duration) {
-        // for(int i = 0; i < enemy.entities -> size(); i++)
-        // {
-        //     if(enemy.entities -> at(i) -> entity_type == "Player")
-        //     {
-        //         enemy.direction = Vector2Scale(Vector2Normalize(Vector2Subtract(enemy.entities -> at(i) -> position, Vector2Add(enemy.position,{enemy.size.x/2, enemy.size.y/2}))), -1.0f);
-        //     }
-        // }
-
         if(enemy.hp < 5000)
         {
             enemy.SetState(&enemy.wandering);
@@ -541,6 +533,7 @@ void MahoragaAdapting::Update(Mahoraga& enemy, float delta_time) {
         if(enemy.hp < 5000)
         {
             enemy.hp += 10.0f;
+            enemy.basic_dmg += 0.5f;
         }
         else
         {
@@ -559,28 +552,25 @@ void MahoragaTeleporting::Update(Mahoraga& enemy, float delta_time) {
             if(CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.aggro_rad))
             {
                 enemy.position = {enemy.entities -> at(i) -> position.x + enemy.RandomNumber(-50.0f, 50.0f), enemy.entities -> at(i) -> position.y + enemy.RandomNumber(-50.0f, 50.0f)};
-                enemy.SetState(&enemy.wandering);
             }
-            else if(!CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.aggro_rad))
+            if(!CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.aggro_rad))
             {
+                enemy.position = {enemy.entities -> at(i) -> position.x + enemy.RandomNumber(-50.0f, 50.0f), enemy.entities -> at(i) -> position.y + enemy.RandomNumber(-100.0f, 100.0f)};
                 enemy.SetState(&enemy.wandering);
             }
 
             if(CheckCollisionPointCircle(enemy.entities -> at(i) -> position, {enemy.position.x + enemy.size.x/2, enemy.position.y + enemy.size.y/2}, enemy.attack_rad))
             {
-                int randomInt = enemy.RandomInt(1, 3);
+                int randomInt = enemy.RandomInt(1, 2);
 
                 if(randomInt == 1)
                 {
-                    enemy.SetState(&enemy.readying2);
+                    enemy.SetState(&enemy.readying3);
                 }
                 else if(randomInt == 2)
                 {
-                    enemy.SetState(&enemy.readying3);
-                }
-                else if(randomInt == 3)
-                {
-                    enemy.SetState(&enemy.blocking);
+                    // enemy.SetState(&enemy.blocking);
+                    enemy.SetState(&enemy.readying2);
                 }
             }
 
@@ -704,7 +694,7 @@ void MahoragaPhase3Attacking::Update(Mahoraga& enemy, float delta_time) {
     enemy.attackPath = ConstructAttackPath(enemy.position, target);
     
     if (enemy.active_time > atk_duration) {
-        int randomInt = enemy.RandomInt(1, 5);
+        int randomInt = enemy.RandomInt(1, 4);
         enemy.animation_frame_timer = 0.14f;
         if(randomInt == 1)
         {
@@ -721,10 +711,6 @@ void MahoragaPhase3Attacking::Update(Mahoraga& enemy, float delta_time) {
         else if(randomInt == 4)
         {
             enemy.SetState(&enemy.attacking3);
-        }
-        else if(randomInt == 5)
-        {
-            enemy.SetState(&enemy.blocking);
         }
     }
     else {

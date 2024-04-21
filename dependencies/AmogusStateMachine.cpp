@@ -67,6 +67,7 @@ void CheckCollision(Amogus& enemy)
 // Amogus
 void Amogus::Update(float delta_time) {
     previousPosition = position;
+    previous_animation_index = animation_index;
     
     current_state->Update(*this, delta_time);
 
