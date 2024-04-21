@@ -24,6 +24,9 @@
 #include "headers/Scene_Title.hpp"
 #include "headers/Scene_Settings.hpp"
 #include "headers/Scene_Game.hpp"
+#include "headers/Scene_Game1.hpp"
+#include "headers/Scene_Game2.hpp"
+#include "headers/Scene_StageSelect.hpp"
 
 
 // GLOBALS
@@ -48,9 +51,21 @@ int main() {
     GameScene game_scene;
     game_scene.SetSceneManager(&scene_manager);
 
+    GameScene1 game_scene1;
+    game_scene1.SetSceneManager(&scene_manager);
+
+    GameScene2 game_scene2;
+    game_scene2.SetSceneManager(&scene_manager);
+
+    StageSelect* stage_select = StageSelect::GetInstance();
+    stage_select->SetSceneManager(&scene_manager);
+
     scene_manager.RegisterScene(title_scene, 0);
     scene_manager.RegisterScene(settings, 1);
-    scene_manager.RegisterScene(&game_scene, 2);
+    scene_manager.RegisterScene(stage_select, 2);
+    scene_manager.RegisterScene(&game_scene, 3);
+    scene_manager.RegisterScene(&game_scene1, 4);
+    scene_manager.RegisterScene(&game_scene2, 5);
 
     scene_manager.SwitchScene(0);
 
@@ -92,6 +107,9 @@ int main() {
     scene_manager.UnregisterScene(0);
     scene_manager.UnregisterScene(1);
     scene_manager.UnregisterScene(2);
+    scene_manager.UnregisterScene(3);
+    scene_manager.UnregisterScene(4);
+    scene_manager.UnregisterScene(5);
 
     ResourceManager::GetInstance()->UnloadAllTextures();
 
