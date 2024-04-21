@@ -132,8 +132,6 @@ public:
     {
         float delta_time = GetFrameTime();
         camera_view.target = player1 -> position;
-
-        std::cout << "FLASHINGGG" << std::endl;
         
         // LOAD SAVEFILE
         if(IsKeyPressed(KEY_V))

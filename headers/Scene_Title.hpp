@@ -85,22 +85,23 @@ public:
         Exit->bounds = { GetScreenWidth()/2.0f-50.0f, (GetScreenHeight()/2.0f+GetScreenHeight()/8.0f)+139.0f, 100.0f, 50.0f };
         Exit->customClickHandler = [this]()
         {
+            //return 0;
             End();
         };
         ui_library.root_container.AddChild(Exit.release());
 
             // Title = std::make_unique<Label>();
-        Title.text = "ENCORE II: BOD";
+        Title.text = "ELDEN LIB";
         Title.color = GRAY;
-        float x = ((GetScreenWidth()-MeasureText("ENCORE II: BOD", 64.0f))/2.0f)-2.0f;
+        float x = ((GetScreenWidth()-MeasureText("ELDEN LIB", 64.0f))/2.0f)-2.0f;
         float y = ((GetScreenHeight()/4.0f)-100.0f)+2.0f;
         Title.bounds = { x, y, 500.0f, 50.0f };
         ui_library.root_container.AddChild(&Title);
 
             // Title2 = std::make_unique<Label>();
-        Title2.text = "ENCORE II: BOD";
+        Title2.text = "ELDEN LIB";
         Title2.color = BLACK;
-        x = ((GetScreenWidth()-MeasureText("ENCORE II: BOD", 64.0f))/2.0f)+2.0f;
+        x = ((GetScreenWidth()-MeasureText("ELDEN LIB", 64.0f))/2.0f)+2.0f;
         y = ((GetScreenHeight()/4.0f)-100.0f)-2.0f;
         Title2.bounds = {x, y, 100.0f, 50.0f };
         ui_library.root_container.AddChild(&Title2);
@@ -108,10 +109,6 @@ public:
 
     void End() override
     {
-            // if (IsMusicStreamPlaying(bgMusic)) StopMusicStream(bgMusic);
-            // delete[] &ui_library;
-            // Title.reset();
-            // Title2.reset();
         UnloadMusicStream(bgMusic);
         CloseAudioDevice();
         UnloadTexture(bg);
@@ -137,15 +134,13 @@ public:
     {
         if (CheckCollisionPointRec(GetMousePosition(), Title.bounds) && IsMouseButtonUp(MOUSE_BUTTON_LEFT))
         {
-            DrawTexture(bg, GetScreenWidth()/2 - bg.width/2, 140, WHITE);
+            DrawTexture(bg, GetScreenWidth()/2.0f - bg.width/2.0f, 140.0f, WHITE);
             PlayMusicStream(bgMusic);
         }
         else
         {
             if (IsMusicStreamPlaying(bgMusic)) StopMusicStream(bgMusic);
         }
-            // DrawTexture(bg, GetScreenWidth()/2 - bg.width/2, 140, WHITE);
-            // PlayMusicStream(bgMusic);
         ui_library.Draw();
     }
 
