@@ -100,9 +100,11 @@ void Malenia::Draw() {
     {
         //DrawRectangleV(position, size, color);
     }
-    DrawCircleLines(position.x + size.x/2, position.y + size.y/2, detection_rad, ORANGE);
-    DrawCircleLines(position.x + size.x/2, position.y + size.y/2, aggro_rad, RED);
-    DrawCircleLines(position.x + size.x/2, position.y + size.y/2, attack_rad, YELLOW);
+
+    // DEBUG STUFF ===============================
+    // DrawCircleLines(position.x + size.x/2, position.y + size.y/2, detection_rad, ORANGE);
+    // DrawCircleLines(position.x + size.x/2, position.y + size.y/2, aggro_rad, RED);
+    // DrawCircleLines(position.x + size.x/2, position.y + size.y/2, attack_rad, YELLOW);
 
     DrawText(name.c_str(), position.x - (MeasureText(name.c_str(), 20.0f) / 2.0f), position.y + size.y + 10.0f, 20.0f, RED);
 

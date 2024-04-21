@@ -40,6 +40,7 @@ const int WINDOW_WIDTH(1280);
 const int WINDOW_HEIGHT(720);
 const int FPS(60);
 const std::string WINDOW_NAME("AntipordaBanalLabre_Homework04");
+const int LEVEL_NUMBER = 0;
 
 std::string IMG_NAME;
 float NUM_TILES;
@@ -538,7 +539,7 @@ int main() {
         std::cerr << "Directory not found" << std::endl;
     }
 
-    LevelLoader(1);
+    LevelLoader(LEVEL_NUMBER);
 
     // DEBUG (Input Check)
     std::cout << "Levels: " << std::endl;

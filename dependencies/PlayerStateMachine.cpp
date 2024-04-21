@@ -83,7 +83,7 @@ void Player::Draw() {
 
     // DrawCircleV(position, radius, color);
 
-    DrawText(state_name.c_str(), position.x - (MeasureText(state_name.c_str(), 20.0f) / 2.0f), position.y + radius + 10.0f, 20.0f, RAYWHITE);
+    //DrawText(state_name.c_str(), position.x - (MeasureText(state_name.c_str(), 20.0f) / 2.0f), position.y + radius + 10.0f, 20.0f, RAYWHITE);
 
     std::stringstream healthstream;
     healthstream << std::fixed << std::setprecision(2) << hp;
