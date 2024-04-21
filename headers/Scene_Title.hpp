@@ -30,7 +30,7 @@ public:
         SetTargetFPS(60);
 
         animFrames = 0;
-        img = LoadImageAnim("whistle.gif", &animFrames);
+        img = LoadImageAnim("textures/whistle.gif", &animFrames);
         bg = LoadTextureFromImage(img);
         nextFrameDataOffset = 0;
         currentAnimFrame = 0;
@@ -40,7 +40,7 @@ public:
         setAudio = Settings::GetInstance()->GetVol();
         std::cout<< "VVVVVVVVVVVVVVVVVVV: " << setAudio<<std::endl;
 
-        bgMusic = LoadMusicStream("../sounds/whistle.mp3");
+        bgMusic = LoadMusicStream("sounds/whistle.mp3");
         SetMusicVolume(bgMusic, 0.5f);
         if (setAudio) {
             SetMusicVolume(bgMusic, 0.5f);
@@ -61,7 +61,7 @@ public:
         {
             if (GetSceneManager() != nullptr)
             {
-                GetSceneManager()->SwitchScene(1);
+                GetSceneManager()->SwitchScene(2);
             }
         };
         ui_library.root_container.AddChild(Start.release());
@@ -74,7 +74,7 @@ public:
         {
             if (GetSceneManager() != nullptr)
             {
-                GetSceneManager()->SwitchScene(3);
+                GetSceneManager()->SwitchScene(1);
             }
         };
         ui_library.root_container.AddChild(Settings.release());
@@ -85,10 +85,7 @@ public:
         Exit->bounds = { GetScreenWidth()/2.0f-50.0f, (GetScreenHeight()/2.0f+GetScreenHeight()/8.0f)+139.0f, 100.0f, 50.0f };
         Exit->customClickHandler = [this]()
         {
-            if (GetSceneManager() != nullptr)
-            {
-                GetSceneManager()->SwitchScene(2);
-            }
+            End();
         };
         ui_library.root_container.AddChild(Exit.release());
 

@@ -96,7 +96,7 @@ public:
 
     Texture GetTexture(const std::string& path)
     {
-        std::filesystem::path dirpath = "../textures/";
+        std::filesystem::path dirpath = "textures/";
         std::string texpath = dirpath.string() + path;
 
         if (textures.find(texpath) == textures.end())

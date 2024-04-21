@@ -48,6 +48,12 @@ int main() {
     GameScene game_scene;
     game_scene.SetSceneManager(&scene_manager);
 
+    scene_manager.RegisterScene(title_scene, 0);
+    scene_manager.RegisterScene(settings, 1);
+    scene_manager.RegisterScene(&game_scene, 2);
+
+    scene_manager.SwitchScene(0);
+
     while(!WindowShouldClose())
     {
         Scene* active_scene = scene_manager.GetActiveScene();

@@ -36,7 +36,7 @@ public:
 
         bg = ResourceManager::GetInstance()->GetTexture("omni2.png");
 
-        bgMusic = LoadMusicStream("../sounds/hotmilk.mp3");
+        bgMusic = LoadMusicStream("sounds/hotmilk.mp3");
         SetMusicVolume(bgMusic, 0.25f);
         bgMusic.looping = true;
         PlayMusicStream(bgMusic);

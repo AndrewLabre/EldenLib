@@ -132,6 +132,8 @@ public:
     {
         float delta_time = GetFrameTime();
         camera_view.target = player1 -> position;
+
+        std::cout << "FLASHINGGG" << std::endl;
         
         // LOAD SAVEFILE
         if(IsKeyPressed(KEY_V))
@@ -323,7 +325,7 @@ private:
     Vector2 cameraBoxDimensions = {300.0f, 300.0f};
 
     // LOAD TEXTURE
-    Texture2D tilesheet = ResourceLoader();
+    Texture2D tilesheet;
     
     // ADD OTHER ENTITIES
     HP_Item* item1;
@@ -540,14 +542,33 @@ private:
 
     void ParseFile(std::string filename)
     {
+        std::cout << "PARSING FILE: " << filename << "===================================================" << std::endl;
+
         std::string img, tile, grid, tile_coords, grid_coords, player_values, enemy_type_string, enemy_values, enemy_texture, collision_tiles_str;
         std::vector<std::string> grid_full, tile_loc, to_split;
         int enemy_type = 0;
         
-        std::fstream MyReadFile(filename);
+
+        std::cout << "WORKS" << std::endl;
+
+        std::fstream MyReadFile;
+        MyReadFile.open(filename);
+        if(MyReadFile.fail())
+        {
+            std::cout << "AAAAAAAAAAAAAAAAAAAAA" << std::endl;
+        }
+        std::cout << "WORKS" << std::endl;
             getline(MyReadFile, img);
+            std::cout << "WORKS " << img << std::endl;
             to_split = StringSplit(img);
+            std::cout << "WORKS " << to_split.size() << std::endl;
             IMG_NAME = to_split[1];
+            std::cout << "WORKS" << std::endl;
+
+            std::cout << "WORKS" << std::endl;
+            tilesheet = ResourceLoader();
+
+            std::cout << "WORKS" << std::endl;
 
             getline(MyReadFile, tile);
             to_split = StringSplit(tile);
@@ -581,7 +602,9 @@ private:
 
             player1 = new Player({std::stof(to_split[0]), std::stof(to_split[1])}, std::stof(to_split[2]), std::stof(to_split[3]), std::stof(to_split[4]), std::stof(to_split[5]), std::stof(to_split[6]), &entities);
             
-            player1 -> AssignTexture("../textures/PlayerSheet.png");
+            std::cout << "THIS ONE" << std::endl;
+            player1 -> AssignTexture("textures/PlayerSheet.png");
+            std::cout << "WORKS" << std::endl;
             player1 -> animations = AnimationLoader("animations/player_animations.txt");
             entities.push_back(player1);
 
@@ -598,8 +621,9 @@ private:
 
                 getline(MyReadFile, enemy_texture);
                 to_split = StringSplit(enemy_texture);
-                enemy -> AssignTexture("../textures/" + to_split[1]);
-                enemy -> animations = AnimationLoader("../animations/malenia_animations.txt");
+                enemy -> AssignTexture("textures/" + to_split[1]);
+                std::cout << "WORKS" << std::endl;
+                enemy -> animations = AnimationLoader("animations/malenia_animations.txt");
 
                 entities.push_back(enemy);
             }
@@ -609,8 +633,9 @@ private:
                 
                 getline(MyReadFile, enemy_texture);
                 to_split = StringSplit(enemy_texture);
-                enemy -> AssignTexture("../textures/" + to_split[1]);
-                enemy -> animations = AnimationLoader("../animations/amogus_animations.txt");
+                enemy -> AssignTexture("textures/" + to_split[1]);
+                std::cout << "WORKS" << std::endl;
+                enemy -> animations = AnimationLoader("animations/amogus_animations.txt");
 
                 entities.push_back(enemy);
             }
@@ -620,8 +645,9 @@ private:
                 
                 getline(MyReadFile, enemy_texture);
                 to_split = StringSplit(enemy_texture);
-                enemy -> AssignTexture("../textures/" + to_split[1]);
-                enemy -> animations = AnimationLoader("../animations/mahoraga_animations.txt");
+                enemy -> AssignTexture("textures/" + to_split[1]);
+                std::cout << "WORKS" << std::endl;
+                enemy -> animations = AnimationLoader("animations/mahoraga_animations.txt");
 
                 entities.push_back(enemy);
             }
@@ -631,7 +657,8 @@ private:
                 
                 getline(MyReadFile, enemy_texture);
                 to_split = StringSplit(enemy_texture);
-                enemy -> AssignTexture("../textures/" + to_split[1]);
+                enemy -> AssignTexture("textures/" + to_split[1]);
+                std::cout << "WORKS" << std::endl;
                 
                 entities.push_back(enemy);
             }
@@ -645,7 +672,7 @@ private:
             //     // enemy_list.push_back(enemy);
             // }
 
-            std::cout << "WORKS" << std::endl;
+            std::cout << "PARSING ENDDDDD==============" << std::endl;
             
         MyReadFile.close();
 
@@ -676,7 +703,8 @@ private:
 
     void LevelLoader(int level = 0)
     {
-        std::string filename = "../levels/" + LEVEL_LIST[level];
+        std::string filename = "levels/" + LEVEL_LIST[level];
+        std::cout << "GOING TO PARSE THIS FILE!" << std::endl;
         ParseFile(filename);
     }
 
@@ -726,7 +754,8 @@ private:
 
     Texture2D ResourceLoader()
     {
-        std::string filename = "../textures/" + IMG_NAME;
+        std::string filename = "textures/" + IMG_NAME;
+        std::cout << "WORKS" << std::endl;
         Texture2D tilesheet = LoadTexture(filename.c_str());
         
         return tilesheet;
@@ -736,7 +765,7 @@ private:
     void SaveProgress(int n_entity)
     {
         std::cout << "CLOSE" << std::endl;
-        std::ofstream outfile("../saves/save.txt");
+        std::ofstream outfile("/saves/save.txt");
         std::string entity_data = std::to_string(n_entity) + "\n";
 
         for(int i=0; i<entities.size(); i++)
