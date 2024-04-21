@@ -73,6 +73,8 @@ public:
 
     Player(Vector2 pos, float rad, float spd, float h, float dmg, float atk_r, std::vector<Entity*>* ent);
 
+    bool facingRight = true;
+
     void Update(float delta_time);
     void Draw();
     void SetState(PlayerState* new_state);

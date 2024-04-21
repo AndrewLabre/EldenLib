@@ -308,6 +308,9 @@ void ParseFile(std::string filename)
         to_split = StringSplit(player_values);
 
         player1 = new Player({std::stof(to_split[0]), std::stof(to_split[1])}, std::stof(to_split[2]), std::stof(to_split[3]), std::stof(to_split[4]), std::stof(to_split[5]), std::stof(to_split[6]), &entities);
+        
+        player1 -> AssignTexture("textures/PlayerSheet.png");
+        player1 -> animations = AnimationLoader("animations/player_animations.txt");
         entities.push_back(player1);
 
         getline(MyReadFile, enemy_type_string);
@@ -535,7 +538,7 @@ int main() {
         std::cerr << "Directory not found" << std::endl;
     }
 
-    LevelLoader(2);
+    LevelLoader(1);
 
     // DEBUG (Input Check)
     std::cout << "Levels: " << std::endl;
