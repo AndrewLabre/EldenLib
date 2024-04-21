@@ -82,6 +82,10 @@ int main() {
         active_scene->End();
     }
 
+    scene_manager.UnregisterScene(0);
+    scene_manager.UnregisterScene(1);
+    scene_manager.UnregisterScene(2);
+
     ResourceManager::GetInstance()->UnloadAllTextures();
 
     CloseWindow();

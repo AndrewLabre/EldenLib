@@ -85,7 +85,6 @@ public:
         Exit->bounds = { GetScreenWidth()/2.0f-50.0f, (GetScreenHeight()/2.0f+GetScreenHeight()/8.0f)+139.0f, 100.0f, 50.0f };
         Exit->customClickHandler = [this]()
         {
-            //return 0;
             End();
         };
         ui_library.root_container.AddChild(Exit.release());
