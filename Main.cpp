@@ -65,6 +65,13 @@ int main() {
             {
                 active_scene->Update();
                 active_scene->Draw();
+                if (active_scene == title_scene)
+                {
+                    if(title_scene->exit_scene)
+                    {
+                        break;
+                    }
+                }
             }
         EndDrawing();
     }

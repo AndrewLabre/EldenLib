@@ -13,6 +13,8 @@
 
 class TitleScene : public Scene {
 public:
+    bool exit_scene = false;
+
     static TitleScene* GetInstance()
     {
         static TitleScene instance;
@@ -85,7 +87,8 @@ public:
         Exit->bounds = { GetScreenWidth()/2.0f-50.0f, (GetScreenHeight()/2.0f+GetScreenHeight()/8.0f)+139.0f, 100.0f, 50.0f };
         Exit->customClickHandler = [this]()
         {
-            End();
+            exit_scene = true;
+            // End();
         };
         ui_library.root_container.AddChild(Exit.release());
 
@@ -112,6 +115,7 @@ public:
         CloseAudioDevice();
         UnloadTexture(bg);
         UnloadImage(img);
+        // CloseWindow();
     }
 
     void Update() override
