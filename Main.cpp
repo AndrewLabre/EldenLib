@@ -39,6 +39,7 @@ int main() {
     // SET WINDOW
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_NAME.c_str());
     SetTargetFPS(FPS);
+    InitAudioDevice();
     
     SceneManager scene_manager;
 
@@ -98,6 +99,8 @@ int main() {
     // }
 
     // CLEANING
+    CloseAudioDevice();
+    
     Scene* active_scene = scene_manager.GetActiveScene();
     if (active_scene != nullptr)
     {

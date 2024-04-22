@@ -28,32 +28,54 @@ public:
 
     void Begin() override
     {
-        InitAudioDevice();
+        // InitAudioDevice();
         SetTargetFPS(60);
 
         animFrames = 0;
-        img = LoadImageAnim("textures/whistle.gif", &animFrames);
+        img = LoadImageAnim("textures/ledarksun_gif.gif", &animFrames);
         bg = LoadTextureFromImage(img);
         nextFrameDataOffset = 0;
         currentAnimFrame = 0;
         frameDelay = 8;
         frameCounter = 0;
 
+        animFrames2 = 0;
+        img2 = LoadImageAnim("textures/lesun_gif.gif", &animFrames2);
+        bg2 = LoadTextureFromImage(img2);
+        nextFrameDataOffset2 = 0;
+        currentAnimFrame2 = 0;
+        frameDelay2 = 8;
+        frameCounter2 = 0;
+
         setAudio = Settings::GetInstance()->GetVol();
         std::cout<< "VVVVVVVVVVVVVVVVVVV: " << setAudio<<std::endl;
 
-        bgMusic = LoadMusicStream("sounds/whistle.mp3");
-        SetMusicVolume(bgMusic, 0.5f);
+        bgMusic = LoadMusicStream("sounds/le_darksun.mp3");
+        SetMusicVolume(bgMusic, 2.0f);
         if (setAudio) {
-            SetMusicVolume(bgMusic, 0.5f);
+            SetMusicVolume(bgMusic, 2.0f);
         }
         else
         {
             SetMusicVolume(bgMusic, 0.0f);
         }
         bgMusic.looping = true;
+
+        setAudio2 = Settings::GetInstance()->GetVol();
+        std::cout<< "VVVVVVVVVVVVVVVVVVV: " << setAudio2<<std::endl;
+
+        bgMusic2 = LoadMusicStream("sounds/le_sun.mp3");
+        SetMusicVolume(bgMusic2, 1.0f);
+        if (setAudio2) {
+            SetMusicVolume(bgMusic2, 1.0f);
+        }
+        else
+        {
+            SetMusicVolume(bgMusic2, 0.0f);
+        }
+        bgMusic2.looping = true;
             
-        ui_library.root_container.bounds = { 10.0f, 10.0f, 600.0f, 500.0f };
+        ui_library.root_container.bounds = { 10.0f, 10.0f, 1080.0f, 620.0f };
 
         std::unique_ptr<Button> Start = std::make_unique<Button>();
         Start->text = "START";
@@ -88,11 +110,9 @@ public:
         Exit->customClickHandler = [this]()
         {
             exit_scene = true;
-            // End();
         };
         ui_library.root_container.AddChild(Exit.release());
 
-            // Title = std::make_unique<Label>();
         Title.text = "ELDEN LIB";
         Title.color = GRAY;
         float x = ((GetScreenWidth()-MeasureText("ELDEN LIB", 64.0f))/2.0f)-2.0f;
@@ -100,7 +120,6 @@ public:
         Title.bounds = { x, y, 500.0f, 50.0f };
         ui_library.root_container.AddChild(&Title);
 
-            // Title2 = std::make_unique<Label>();
         Title2.text = "ELDEN LIB";
         Title2.color = BLACK;
         x = ((GetScreenWidth()-MeasureText("ELDEN LIB", 64.0f))/2.0f)+2.0f;
@@ -112,15 +131,20 @@ public:
     void End() override
     {
         UnloadMusicStream(bgMusic);
-        CloseAudioDevice();
+        UnloadMusicStream(bgMusic2);
+        // CloseAudioDevice();
         UnloadTexture(bg);
+        UnloadTexture(bg2);
         UnloadImage(img);
+        UnloadImage(img2);
         // CloseWindow();
     }
 
     void Update() override
     {
         UpdateMusicStream(bgMusic);
+        UpdateMusicStream(bgMusic2);
+
         frameCounter++;
         if (frameCounter >= frameDelay)
         {
@@ -130,6 +154,17 @@ public:
             UpdateTexture(bg, ((unsigned char *)img.data) + nextFrameDataOffset);
             frameCounter = 0;
         }
+
+        frameCounter2++;
+        if (frameCounter2 >= frameDelay2)
+        {
+            currentAnimFrame2++;
+            if (currentAnimFrame2 >= animFrames2) currentAnimFrame2 = 0;
+            nextFrameDataOffset2 = img2.width*img2.height*4*currentAnimFrame2;
+            UpdateTexture(bg2, ((unsigned char *)img2.data) + nextFrameDataOffset2);
+            frameCounter2 = 0;
+        }
+
         ui_library.Update();
     }
 
@@ -137,32 +172,35 @@ public:
     {
         if (CheckCollisionPointRec(GetMousePosition(), Title.bounds) && IsMouseButtonUp(MOUSE_BUTTON_LEFT))
         {
-            DrawTexture(bg, GetScreenWidth()/2.0f - bg.width/2.0f, 140.0f, WHITE);
+            if (IsMusicStreamPlaying(bgMusic2)) StopMusicStream(bgMusic2);
+            DrawTexture(bg, GetScreenWidth()/2.0f - bg.width/2.0f, GetScreenHeight()/2.0f - bg.height/2.0f, WHITE);
             PlayMusicStream(bgMusic);
         }
         else
         {
             if (IsMusicStreamPlaying(bgMusic)) StopMusicStream(bgMusic);
+            DrawTexture(bg2, GetScreenWidth()/2.0f - bg.width/2.0f, GetScreenHeight()/2.0f - bg.height/2.0f, WHITE);
+            PlayMusicStream(bgMusic2);
         }
         ui_library.Draw();
     }
 
 private:
     UILibrary ui_library;
-    Image img;
-    Texture2D bg;
-    int animFrames;
-    unsigned int nextFrameDataOffset;
-    int currentAnimFrame;
-    int frameDelay;
-    int frameCounter;
+    Image img, img2;
+    Texture2D bg, bg2;
+    int animFrames, animFrames2;
+    unsigned int nextFrameDataOffset, nextFrameDataOffset2;
+    int currentAnimFrame, currentAnimFrame2;
+    int frameDelay, frameDelay2;
+    int frameCounter, frameCounter2;
 
-    Music bgMusic;
+    Music bgMusic, bgMusic2;
 
     Label Title;
     Label Title2;
 
-    bool setAudio;
+    bool setAudio, setAudio2;
 
     TitleScene() {}
 };

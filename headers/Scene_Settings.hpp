@@ -26,22 +26,22 @@ public:
 
     void Begin() override
     {
-        //InitWindow(800, 600, "Encore!2");
-        InitAudioDevice();
+        //InitAudioDevice();
         SetTargetFPS(60);
 
-        std::cout<< "VVVVVVVVVVVVVVVVVVV: " << state<<std::endl;
+        animFrames3 = 0;
+        img3 = LoadImageAnim("textures/lemao_gif.gif", &animFrames3);
+        bg3 = LoadTextureFromImage(img3);
+        nextFrameDataOffset3 = 0;
+        currentAnimFrame3 = 0;
+        frameDelay3 = 8;
+        frameCounter3 = 0;
 
-            //state = true;
-
-        bg = ResourceManager::GetInstance()->GetTexture("omni2.png");
-
-        bgMusic = LoadMusicStream("sounds/hotmilk.mp3");
-        SetMusicVolume(bgMusic, 0.25f);
-        bgMusic.looping = true;
-        PlayMusicStream(bgMusic);
+        bgMusic3 = LoadMusicStream("sounds/le_mao.mp3");
+        SetMusicVolume(bgMusic3, 1.0f);
+        bgMusic3.looping = true;
             
-        ui_library.root_container.bounds = { 10.0f, 10.0f, 600.0f, 500.0f };
+        ui_library.root_container.bounds = { 10.0f, 10.0f, 1080.0f, 620.0f };
 
         SetAudio.text = "Audio ON";
         SetAudio.alttext = "Audio OFF";
@@ -74,7 +74,6 @@ public:
         };
         ui_library.root_container.AddChild(Back.release());
 
-        // Title = std::make_unique<Label>();
         Title.text = "SETTINGS";
         Title.color = GRAY;
         float x = ((GetScreenWidth()-MeasureText("SETTINGS", 64.0f))/2.0f)-2.0f;
@@ -82,7 +81,6 @@ public:
         Title.bounds = { x, y, 380.0f, 50.0f };
         ui_library.root_container.AddChild(&Title);
 
-        // Title2 = std::make_unique<Label>();
         Title2.text = "SETTINGS";
         Title2.color = BLACK;
         x = ((GetScreenWidth()-MeasureText("SETTINGS", 64.0f))/2.0f)+2.0f;
@@ -93,43 +91,59 @@ public:
 
     void End() override
     {
-            // (IsMusicStreamPlaying(bgMusic)) StopMusicStream(bgMusic);
-            // delete[] &ui_library;
-            // Title.reset();
-            // Title2.reset();
-        UnloadMusicStream(bgMusic);
-        CloseAudioDevice();
-        ResourceManager::GetInstance()->UnloadAllTextures();
+        UnloadMusicStream(bgMusic3);
+        //CloseAudioDevice();
+        UnloadTexture(bg3);
+        UnloadImage(img3);
+        //ResourceManager::GetInstance()->UnloadAllTextures();
     }
 
     void Update() override
     {
         if (state)
         {
-            SetMusicVolume(bgMusic, 0.25f);
+            SetMusicVolume(bgMusic3, 1.0f);
         }
         else
         {
-            SetMusicVolume(bgMusic, 0.0f);
+            SetMusicVolume(bgMusic3, 0.0f);
         }
-        UpdateMusicStream(bgMusic);
+        UpdateMusicStream(bgMusic3);
+
+        frameCounter3++;
+        if (frameCounter3 >= frameDelay3)
+        {
+            currentAnimFrame3++;
+            if (currentAnimFrame3 >= animFrames3) currentAnimFrame3 = 0;
+            nextFrameDataOffset3 = img3.width*img3.height*4*currentAnimFrame3;
+            UpdateTexture(bg3, ((unsigned char *)img3.data) + nextFrameDataOffset3);
+            frameCounter3 = 0;
+        }
+
         ui_library.Update();
     }
 
     void Draw() override
     {
+        PlayMusicStream(bgMusic3);
         if (CheckCollisionPointRec(GetMousePosition(), Title.bounds) && IsMouseButtonUp(MOUSE_BUTTON_LEFT))
         {
-            DrawTexturePro(bg, {0.0f,0.0f,676.0f,463.0f}, {0.0f,0.0f,800.0f,600.0f}, {0.0f, 0.0f}, 0.0f, WHITE);
+            DrawTexture(bg3, GetScreenWidth()/2.0f - bg3.width/2.0f, GetScreenHeight()/2.0f - bg3.height/2.0f, WHITE);
         }
         ui_library.Draw();
     }
 
 private:
     UILibrary ui_library;
-    Texture bg;
+    Image img3;
+    Texture2D bg3;
+    int animFrames3;
+    unsigned int nextFrameDataOffset3;
+    int currentAnimFrame3;
+    int frameDelay3;
+    int frameCounter3;
 
-    Music bgMusic;
+    Music bgMusic3;
 
     Label Title;
     Label Title2;
