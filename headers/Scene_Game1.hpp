@@ -90,7 +90,8 @@ public:
         // TRANSFORM MAP
         float x_scale = WINDOW_WIDTH / (GRID_SIZE[0]*tile_list[0].loc_in_sheet.width);
         float y_scale = WINDOW_HEIGHT / (GRID_SIZE[1]*tile_list[1].loc_in_sheet.height);
-        float scale = std::min(x_scale, y_scale);
+        // float scale = std::min(x_scale, y_scale);
+        float scale = 4.0f;
 
         float x_offset = (WINDOW_WIDTH - (GRID_SIZE[0]*tile_list[0].loc_in_sheet.width*scale)) / 2.0f;
         float y_offset = (WINDOW_HEIGHT - (GRID_SIZE[1]*tile_list[1].loc_in_sheet.height*scale)) / 2.0f;
@@ -282,8 +283,8 @@ private:
     };
 
     // GLOBALS
-    const int WINDOW_WIDTH = 1280;
-    const int WINDOW_HEIGHT = 720;
+    const float WINDOW_WIDTH = 1280.0f;
+    const float WINDOW_HEIGHT = 720.0f;
     const int FPS = 60;
     const std::string WINDOW_NAME = "Elden Lib";
     const int LEVEL_NUMBER = 1;
