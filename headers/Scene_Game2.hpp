@@ -98,6 +98,12 @@ public:
 
         // TILES TO GRID
         screen_rectangles = FillGrid(tile_list, x_offset, y_offset, scale);
+
+        //MUSIC
+        bgMusic = LoadMusicStream("sounds/mahoraga/maho_bgm.mp3");
+        bgMusic.looping = true;
+        SetMusicVolume(bgMusic, 0.42f);
+        PlayMusicStream(bgMusic);
     }   
 
     void End() override
@@ -118,10 +124,14 @@ public:
         }
         entities.clear();
         collision_tiles.clear();
+
+        UnloadMusicStream(bgMusic);
     }
 
     void Update() override 
     {
+        UpdateMusicStream(bgMusic);
+
         float delta_time = GetFrameTime();
         camera_view.target = player1 -> position;
         
@@ -254,6 +264,8 @@ public:
 
         if(game_state == 1)
         {
+            StopMusicStream(bgMusic);
+
             std::stringstream healthpoints;
             healthpoints << std::fixed << std::setprecision(2) << player1->hp;
             std::string healthp = healthpoints.str();
@@ -326,6 +338,9 @@ private:
 
     // TILES TO GRID
     std::vector<std::vector<Rectangle>> screen_rectangles;
+
+    // SET MUSIC
+    Music bgMusic;
 
 
     // UTILS

@@ -150,7 +150,7 @@ public:
     void Draw() override
     {
         PlayMusicStream(bgMusic4);
-        if (CheckCollisionPointRec(GetMousePosition(), Title.bounds) && IsMouseButtonUp(MOUSE_BUTTON_LEFT))
+        if (CheckCollisionPointRec(GetMousePosition(), {1270.0f, 710.0f, 10.0f, 10.0f}) && IsMouseButtonUp(MOUSE_BUTTON_LEFT))
         {
             DrawTexture(bg4, GetScreenWidth()/2.0f - bg4.width/2.0f, GetScreenHeight()/2.0f - bg4.height/2.0f, WHITE);
         }

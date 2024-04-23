@@ -233,6 +233,20 @@ Mahoraga::Mahoraga(std::string i, Vector2 pos, Vector2 s, float spd, float h, fl
     shield = 1000.0f;
     og_size = s;
     burst_rad = det;
+
+    AddSound("sounds/mahoraga/maho_idle.mp3");
+    AddSound("sounds/mahoraga/maho_wandering.mp3");
+    AddSound("sounds/mahoraga/maho_chasing.mp3");
+    AddSound("sounds/mahoraga/maho_blocking.mp3");
+    AddSound("sounds/mahoraga/maho_adapting.mp3");
+    AddSound("sounds/mahoraga/maho_teleporting.mp3");
+    AddSound("sounds/mahoraga/maho_ready1.mp3");
+    AddSound("sounds/mahoraga/maho_ready2.mp3");
+    AddSound("sounds/mahoraga/maho_ready3.mp3");
+    AddSound("sounds/mahoraga/maho_attack1.mp3");
+    AddSound("sounds/mahoraga/maho_attack2.mp3");
+    AddSound("sounds/mahoraga/maho_attack3.mp3");
+
     SetState(&idle);
 }
 
@@ -246,6 +260,8 @@ void MahoragaIdle::Enter(Mahoraga& enemy) {
     enemy.animation_timer = 0.0f;
     enemy.animation_index = 0;
     enemy.animation_frame = 0;
+
+    enemy.PlaySoundInList(0);
 }
 void MahoragaWandering::Enter(Mahoraga& enemy) {
     std::cout << "wandering" << std::endl;
@@ -257,6 +273,8 @@ void MahoragaWandering::Enter(Mahoraga& enemy) {
     enemy.animation_timer = 0.0f;
     enemy.animation_index = 1;
     enemy.animation_frame = 0;
+
+    enemy.PlaySoundInList(1);
 }
 void MahoragaChasing::Enter(Mahoraga& enemy) {
     std::cout << "chasing" << std::endl;
@@ -266,6 +284,8 @@ void MahoragaChasing::Enter(Mahoraga& enemy) {
     enemy.animation_timer = 0.0f;
     enemy.animation_index = 1;
     enemy.animation_frame = 0;
+
+    enemy.PlaySoundInList(2);
 }
 void MahoragaBlocking::Enter(Mahoraga& enemy) {
     std::cout << "blocking" << std::endl;
@@ -275,6 +295,8 @@ void MahoragaBlocking::Enter(Mahoraga& enemy) {
     enemy.animation_timer = 0.0f;
     enemy.animation_index = 6;
     enemy.animation_frame = 3;
+
+    enemy.PlaySoundInList(3);
 }
 void MahoragaAdapting::Enter(Mahoraga& enemy) {
     std::cout << "adapting" << std::endl;
@@ -284,6 +306,8 @@ void MahoragaAdapting::Enter(Mahoraga& enemy) {
     enemy.animation_timer = 0.0f;
     enemy.animation_index = 6;
     enemy.animation_frame = 2;
+
+    enemy.PlaySoundInList(4);
 }
 void MahoragaTeleporting::Enter(Mahoraga& enemy) {
     std::cout << "teleporting" << std::endl;
@@ -294,6 +318,8 @@ void MahoragaTeleporting::Enter(Mahoraga& enemy) {
     enemy.animation_timer = 0.0f;
     enemy.animation_index = 5;
     enemy.animation_frame = 0;
+
+    enemy.PlaySoundInList(5);
 }
 void MahoragaPhase1Readying::Enter(Mahoraga& enemy) {
     std::cout << "readying1" << std::endl;
@@ -303,6 +329,8 @@ void MahoragaPhase1Readying::Enter(Mahoraga& enemy) {
     enemy.animation_timer = 0.0f;
     enemy.animation_index = 5;
     enemy.animation_frame = 0;
+
+    enemy.PlaySoundInList(6);
 }
 void MahoragaPhase2Readying::Enter(Mahoraga& enemy) {
     std::cout << "readying2" << std::endl;
@@ -312,6 +340,8 @@ void MahoragaPhase2Readying::Enter(Mahoraga& enemy) {
     enemy.animation_timer = 0.0f;
     enemy.animation_index = 6;
     enemy.animation_frame = 0;
+
+    enemy.PlaySoundInList(7);
 }
 void MahoragaPhase3Readying::Enter(Mahoraga& enemy) {
     std::cout << "readying3" << std::endl;
@@ -321,6 +351,8 @@ void MahoragaPhase3Readying::Enter(Mahoraga& enemy) {
     enemy.animation_timer = 0.0f;
     enemy.animation_index = 5;
     enemy.animation_frame = 0;
+
+    enemy.PlaySoundInList(8);
 }
 void MahoragaPhase1Attacking::Enter(Mahoraga& enemy) {
     std::cout << "attacking1" << std::endl;
@@ -331,6 +363,8 @@ void MahoragaPhase1Attacking::Enter(Mahoraga& enemy) {
     enemy.animation_index = 6;
     enemy.animation_frame = 0;
     enemy.animation_frame_timer = 0.07f;
+
+    enemy.PlaySoundInList(9);
 }
 void MahoragaPhase2Attacking::Enter(Mahoraga& enemy) {
     std::cout << "attacking2" << std::endl;
@@ -340,6 +374,8 @@ void MahoragaPhase2Attacking::Enter(Mahoraga& enemy) {
     enemy.animation_timer = 0.0f;
     enemy.animation_index = 6;
     enemy.animation_frame = 0;
+
+    enemy.PlaySoundInList(10);
 }
 void MahoragaPhase3Attacking::Enter(Mahoraga& enemy) {
     std::cout << "attacking3" << std::endl;
@@ -349,6 +385,8 @@ void MahoragaPhase3Attacking::Enter(Mahoraga& enemy) {
     enemy.animation_timer = 0.0f;
     enemy.animation_index = 6;
     enemy.animation_frame = 0;
+
+    enemy.PlaySoundInList(11);
 }
 
 // UPDATE
