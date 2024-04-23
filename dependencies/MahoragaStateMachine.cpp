@@ -149,9 +149,9 @@ void Mahoraga::Draw() {
     {
         //DrawRectangleV(position, size, color);
     }
-    DrawCircleLines(position.x + size.x/2, position.y + size.y/2, detection_rad, ORANGE);
-    DrawCircleLines(position.x + size.x/2, position.y + size.y/2, aggro_rad, RED);
-    DrawCircleLines(position.x + size.x/2, position.y + size.y/2, attack_rad, YELLOW);
+    // DrawCircleLines(position.x + size.x/2, position.y + size.y/2, detection_rad, ORANGE);
+    // DrawCircleLines(position.x + size.x/2, position.y + size.y/2, aggro_rad, RED);
+    // DrawCircleLines(position.x + size.x/2, position.y + size.y/2, attack_rad, YELLOW);
 
     DrawText(name.c_str(), position.x - (MeasureText(name.c_str(), 20.0f) / 2.0f), position.y + size.y + 20.0f, 20.0f, RED);
 
@@ -571,12 +571,12 @@ void MahoragaAdapting::Update(Mahoraga& enemy, float delta_time) {
         enemy.active_time += delta_time;
         if(enemy.hp < 5000)
         {
-            enemy.hp += 10.0f;
+            enemy.hp += 25.0f;
             enemy.basic_dmg += 0.5f;
         }
         else
         {
-            enemy.hp += 1.0f;
+            enemy.hp += 5.0f;
         }
     }
 }

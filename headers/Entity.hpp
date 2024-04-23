@@ -57,6 +57,8 @@ public:
         {
             UnloadSound(sounds[i]);
         }
+
+        sounds.clear();
     }
 
     void PlaySoundInList(int index)

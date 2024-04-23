@@ -15,22 +15,6 @@ public:
     void Begin() override
     {
         SetTargetFPS(FPS);
-
-        // SET UI
-        ui_library.root_container.bounds = { 10.0f, 10.0f, 1080.0f, 620.0f };
-
-        std::unique_ptr<Button> Back = std::make_unique<Button>();
-        Back->text = "BACK";
-        Back->width = 100.0f;
-        Back->bounds = { (WINDOW_WIDTH - 110.0f), 10.0f, 100.0f, 50.0f };
-        Back->customClickHandler = [this]()
-        {
-            if (GetSceneManager() != nullptr)
-            {
-                GetSceneManager()->SwitchScene(2);
-            }
-        };
-        ui_library.root_container.AddChild(Back.release());
         
         // LEVELS
         std::filesystem::path dirpath = "levels/";
@@ -133,6 +117,11 @@ public:
 
     void End() override
     {
+        if(!enemy_alive)
+        {
+            hp_container.width += 100.0f;
+            base_dmg += 50.0f;
+        }
         SaveProgress();
         // CLEANING
         UnloadTexture(tilesheet);
@@ -156,6 +145,11 @@ public:
 
     void Update() override 
     {
+        if(IsKeyPressed(KEY_B))
+        {
+            GetSceneManager()->SwitchScene(2);
+        }
+
         UpdateMusicStream(bgMusic);
 
         float delta_time = GetFrameTime();
@@ -219,7 +213,6 @@ public:
         hp_bar = {10.0f, 10.0f, player1->hp, 16.0f};
         boss_hp_bar = {100.0f, WINDOW_HEIGHT - 32.0f, (entities[1]->hp / boss_hp_max) * (WINDOW_WIDTH-200.0f), 16.0f};
 
-        ui_library.Update();
     }
 
     void Draw() override
@@ -261,23 +254,24 @@ public:
             healthpoints << std::fixed << std::setprecision(2) << player1->hp;
             std::string healthp = healthpoints.str();
 
-            DrawRectangleV({0, 0}, {WINDOW_WIDTH, WINDOW_HEIGHT}, RAYWHITE);
+            DrawRectangleV({0.0f, 0.0f}, {WINDOW_WIDTH, WINDOW_HEIGHT}, BLACK);
                 
             if(!enemy_alive)
             {
-                std::string sc = healthp + " / 100";
+                std::string sc = healthp + " / " + std::to_string(hp_container.width).c_str();
                 DrawText("YOU WIN!", (WINDOW_WIDTH/2 - (MeasureText("YOU WIN!", 100))/2), (WINDOW_HEIGHT/2) - 100, 100, BLUE);
-                DrawText(sc.c_str(), (WINDOW_WIDTH/2 - (MeasureText(sc.c_str(), 50))/2), (WINDOW_HEIGHT/2) + 100, 50, BLACK);
+                DrawText(sc.c_str(), (WINDOW_WIDTH/2 - (MeasureText(sc.c_str(), 50))/2), (WINDOW_HEIGHT/2) + 100, 50, WHITE);
             }
             else if(player1->hp <= 0)
             {
-                std::string sc = healthp + " / 100";
+                std::string sc = healthp + " / " + std::to_string(hp_container.width).c_str();
                 DrawText("YOU LOSE", (WINDOW_WIDTH/2 - (MeasureText("YOU LOSE", 100))/2), (WINDOW_HEIGHT/2) - 100, 100, RED);
-                DrawText(sc.c_str(), (WINDOW_WIDTH/2 - (MeasureText(sc.c_str(), 50))/2), (WINDOW_HEIGHT/2) + 100, 50, BLACK);
+                DrawText(sc.c_str(), (WINDOW_WIDTH/2 - (MeasureText(sc.c_str(), 50))/2), (WINDOW_HEIGHT/2) + 100, 50, WHITE);
             }
         }
-
-        ui_library.Draw();
+        
+        //ESC BUTTON
+        DrawText("[B] - STAGE SELECT", WINDOW_WIDTH - 300.0f, 100.0f, 20.0f, RAYWHITE);
     }
 
 private:
@@ -342,8 +336,6 @@ private:
     // BOSS UI
     Rectangle boss_hp_cont, boss_hp_bar;
     float boss_hp_max;
-
-    UILibrary ui_library;
 
     // UTILS
     float RandomNumber(float Min, float Max)
@@ -726,6 +718,7 @@ private:
             if(MyReadFile.fail())
             {
                 std::cout << "No Save File detected." << std::endl;
+                MyReadFile.close();
                 return;
             }
             getline(MyReadFile, entity_values);
