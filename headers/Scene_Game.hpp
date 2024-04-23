@@ -108,6 +108,11 @@ public:
 
         // TILES TO GRID
         screen_rectangles = FillGrid(tile_list, x_offset, y_offset, scale);
+
+        //MUSIC
+        bgMusic = LoadMusicStream("sounds/malenia/maleniamusic.wav");
+        bgMusic.looping = true;
+        PlayMusicStream(bgMusic);
     }   
 
     void End() override
@@ -119,6 +124,7 @@ public:
         for(int i=0; i<entities.size(); i++)
         {
             entities[i]->UnassignTexture();
+            entities[i]->UnloadSounds();
         }
 
         for(auto i=entities.begin(); i!=entities.end(); ++i)
@@ -127,10 +133,14 @@ public:
         }
         entities.clear();
         collision_tiles.clear();
+
+        UnloadMusicStream(bgMusic);
     }
 
     void Update() override 
     {
+        UpdateMusicStream(bgMusic);
+
         float delta_time = GetFrameTime();
         camera_view.target = player1 -> position;
         
@@ -335,6 +345,9 @@ private:
 
     // TILES TO GRID
     std::vector<std::vector<Rectangle>> screen_rectangles;
+
+    // SET MUSIC
+    Music bgMusic;
 
 
     // UTILS

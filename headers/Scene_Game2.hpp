@@ -109,6 +109,7 @@ public:
         for(int i=0; i<entities.size(); i++)
         {
             entities[i]->UnassignTexture();
+            entities[i]->UnloadSounds();
         }
 
         for(auto i=entities.begin(); i!=entities.end(); ++i)

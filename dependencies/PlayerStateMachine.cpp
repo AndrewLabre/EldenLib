@@ -131,6 +131,8 @@ void Player::TakeDmg() {
             hp -= incoming_dmg;
             std::cout << "PLAYER HIT" << std::endl;
             iFrameTimer = iFrames;
+
+            PlaySoundInList(3);
         }
         if (current_state == &blocking)
         {
@@ -154,6 +156,12 @@ Player::Player(Vector2 pos, float rad, float spd, float h, float dmg, float atk_
     entities = ent;
     size.x = atk_rad;
     size.y = rad;
+
+    AddSound("sounds/player/rolling.wav");
+    AddSound("sounds/player/swordswing.wav");
+    AddSound("sounds/player/blocking.wav");
+    AddSound("sounds/damage.wav");
+
     SetState(&idle);
 }
 
@@ -195,6 +203,8 @@ void PlayerAttacking::Enter(Player& player) {
         std::cout << "Entity: " << i << " =  " << player.entities -> at(i) -> entity_type << std::endl; 
     }
     state_name = "ATTACKING ! ! !";
+
+    player.PlaySoundInList(1);
 }
 void PlayerBlocking::Enter(Player& player) {
     player.color = WHITE;
@@ -204,6 +214,8 @@ void PlayerBlocking::Enter(Player& player) {
     player.animation_index = 7;
     player.animation_frame = 0;
     player.animation_frame_timer = 0.14f;
+
+    player.PlaySoundInList(2);
 }
 void PlayerDodging::Enter(Player& player) {
     player.color = BLUE;
@@ -213,6 +225,8 @@ void PlayerDodging::Enter(Player& player) {
     player.animation_timer = 0.0f;
     player.animation_frame = 0;
     player.animation_frame_timer = 0.04f;
+
+    player.PlaySoundInList(0);
 }
 
 

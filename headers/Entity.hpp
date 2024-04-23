@@ -28,6 +28,9 @@ public:
     float animation_frame_timer = 0.14f;
     float animation_timer = 0.0f;
 
+    //Sounds
+    std::vector<Sound> sounds;
+
     void AssignTexture(std::string filename)
     {
         texture = LoadTexture(filename.c_str());
@@ -36,6 +39,33 @@ public:
     void UnassignTexture()
     {
         UnloadTexture(texture);
+    }
+
+    void AddSound(std::string filename)
+    {
+        Sound new_sound;
+
+        new_sound = LoadSound(filename.c_str());
+
+        sounds.push_back(new_sound);
+    }
+
+    void UnloadSounds()
+    {
+        for(int i = 0; i < sounds.size(); i++)
+        {
+            UnloadSound(sounds[i]);
+        }
+    }
+
+    void PlaySoundInList(int index)
+    {
+        PlaySound(sounds[index]);
+    }
+
+    void StopSoundInList(int index)
+    {
+        StopSound(sounds[index]);
     }
 };
 

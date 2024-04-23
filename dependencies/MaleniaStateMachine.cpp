@@ -154,6 +154,8 @@ void Malenia::TakeDmg() {
     {
         hp -= incoming_dmg;
         iFrameTimer = iFrames;
+
+        PlaySoundInList(2);
     }
 }
 Malenia::Malenia(std::string i, Vector2 pos, Vector2 s, float spd, float h, float dmg, float det, float agg, float atk, std::vector<Entity*>* ent) {
@@ -168,6 +170,11 @@ Malenia::Malenia(std::string i, Vector2 pos, Vector2 s, float spd, float h, floa
     attack_rad = atk;
     entities = ent;
     entity_type = "Enemy";
+
+    AddSound("sounds/malenia/maleniareadying.wav");
+    AddSound("sounds/malenia/waterfowl.wav");
+    AddSound("sounds/damage.wav");
+
     SetState(&wandering);
 }
 
@@ -198,6 +205,8 @@ void MaleniaReadying::Enter(Malenia& enemy) {
     enemy.animation_index = 5;
     enemy.animation_timer = 0.0f;
     enemy.animation_frame = 0;
+
+    enemy.PlaySoundInList(0);
 }
 void MaleniaAttacking::Enter(Malenia& enemy) {
     enemy.color = VIOLET;
@@ -207,6 +216,8 @@ void MaleniaAttacking::Enter(Malenia& enemy) {
     enemy.animation_timer = 0.0f;
     enemy.animation_frame = 0;
     enemy.animation_frame_timer = 0.07f;
+
+    enemy.PlaySoundInList(1);
 }
 
 // MALENIA ONLY ///////////////////////////////////////////////////////////
@@ -218,6 +229,8 @@ void MaleniaReadying2::Enter(Malenia& enemy) {
     enemy.animation_index = 5;
     enemy.animation_frame = 0;
     enemy.animation_frame_timer = 0.07f;
+
+    enemy.PlaySoundInList(0);
 }
 void MaleniaAttacking2::Enter(Malenia& enemy) {
     enemy.color = VIOLET;
@@ -239,6 +252,8 @@ void MaleniaAttacking2::Enter(Malenia& enemy) {
     }
 
     enemy.attackPath = ConstructAttackPath(enemy.position, target);
+
+    enemy.PlaySoundInList(1);
 }
 
 void MaleniaReadying3::Enter(Malenia& enemy) {
@@ -249,6 +264,8 @@ void MaleniaReadying3::Enter(Malenia& enemy) {
     enemy.animation_timer = 0.0f;
     enemy.animation_index = 5;
     enemy.animation_frame = 0;
+
+    enemy.PlaySoundInList(0);
 }
 void MaleniaAttacking3::Enter(Malenia& enemy) {
     enemy.color = VIOLET;
@@ -269,6 +286,8 @@ void MaleniaAttacking3::Enter(Malenia& enemy) {
     }
 
     enemy.attackPath = ConstructAttackPath(enemy.position, target);
+
+    enemy.PlaySoundInList(1);
 }
 // MALENIA ONLY ///////////////////////////////////////////////////////////
 
