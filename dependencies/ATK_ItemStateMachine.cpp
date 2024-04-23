@@ -59,6 +59,7 @@ ATK_ItemState* ATK_Item::GetState() {
     return current_state;
 }
 ATK_Item::ATK_Item(std::string i, Vector2 pos, float rad, float dmg, std::vector<Entity*>* ent) {
+    nme = i;
     name = i;
     position = pos;
     radius = rad;

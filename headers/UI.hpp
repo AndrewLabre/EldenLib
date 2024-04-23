@@ -50,8 +50,8 @@ public:
 
     void Draw() override
     {
-        DrawRectangleRec(bounds, GRAY);
-        DrawText(text.c_str(), bounds.x + ((width - MeasureText(text.c_str(), 20))/2), bounds.y + 16, 20, BLACK);
+        DrawRectangleRec(bounds, {0, 0, 0, 75});
+        DrawText(text.c_str(), bounds.x + ((width - MeasureText(text.c_str(), 20))/2), bounds.y + 16, 20, RAYWHITE);
     }
 
     bool HandleClick(Vector2 click_position) override
@@ -136,6 +136,15 @@ public:
         return "";
     }
 
+    void DeleteChild()
+    {
+        for(auto i=children.begin(); i!=children.end(); ++i)
+        {
+            delete *i;
+        }
+        children.clear();
+    }
+
     void AddChild(UIComponent* child)
     {
         children.push_back(child);
@@ -168,6 +177,8 @@ public:
 
 class UILibrary {
 public:
+    ~UILibrary() {};
+
     UIContainer root_container;
 
     void Update()

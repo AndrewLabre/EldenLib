@@ -159,6 +159,7 @@ void Malenia::TakeDmg() {
     }
 }
 Malenia::Malenia(std::string i, Vector2 pos, Vector2 s, float spd, float h, float dmg, float det, float agg, float atk, std::vector<Entity*>* ent) {
+    nme = i;
     name = i;
     position = pos;
     size = s;

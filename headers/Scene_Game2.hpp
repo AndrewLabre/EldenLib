@@ -15,6 +15,22 @@ public:
     void Begin() override
     {
         SetTargetFPS(FPS);
+
+        // SET UI
+        ui_library.root_container.bounds = { 10.0f, 10.0f, 1080.0f, 620.0f };
+
+        std::unique_ptr<Button> Back = std::make_unique<Button>();
+        Back->text = "BACK";
+        Back->width = 100.0f;
+        Back->bounds = { (WINDOW_WIDTH - 110.0f), 10.0f, 100.0f, 50.0f };
+        Back->customClickHandler = [this]()
+        {
+            if (GetSceneManager() != nullptr)
+            {
+                GetSceneManager()->SwitchScene(2);
+            }
+        };
+        ui_library.root_container.AddChild(Back.release());
         
         // LEVELS
         std::filesystem::path dirpath = "levels/";
@@ -104,10 +120,21 @@ public:
         bgMusic.looping = true;
         SetMusicVolume(bgMusic, 0.42f);
         PlayMusicStream(bgMusic);
+
+        // LOAD SAVE FILE
+        SaveLoader("saves/save.txt");
+
+        // SET HP BAR
+        hp_container = {10.0f, 10.0f, player1->hp, 16.0f};
+        boss_hp_cont = {100.0f, WINDOW_HEIGHT - 32.0f, WINDOW_WIDTH-200.0f, 16.0f};
+        boss_hp_max = entities[1]->hp;
+
+        base_dmg = player1->basic_dmg;
     }   
 
     void End() override
     {
+        SaveProgress();
         // CLEANING
         UnloadTexture(tilesheet);
         delete[] tile_list;
@@ -134,28 +161,6 @@ public:
 
         float delta_time = GetFrameTime();
         camera_view.target = player1 -> position;
-        
-        // LOAD SAVEFILE
-        if(IsKeyPressed(KEY_V))
-        {
-            std::filesystem::path dirpath = "saves/";
-
-            std::vector<std::string> to_split;
-            std::string filename = "";
-            if(std::filesystem::exists(dirpath) && std::filesystem::is_directory(dirpath))
-            {
-                for(const auto& i : std::filesystem::directory_iterator(dirpath))
-                {
-                    filename = i.path().string();
-                }
-            }
-            else
-            {
-                std::cerr << "Directory not found" << std::endl;
-            }
-
-            SaveLoader(filename);
-        }
 
         // ITEM SPAWNING
         spawn_timer += delta_time;
@@ -200,26 +205,6 @@ public:
             game_state = 1;
         }
 
-        // CAMERA DRIFT SETTINGS
-        // for(int i=0; i<collision_tiles.size(); i++)
-        // {
-        //     if(!player_colliding)
-        //     {
-        //         if(camera_view.target.x - player1->position.x + 10 >= cameraBoxDimensions.x/2 || camera_view.target.x - player1->position.x - 10 <= -cameraBoxDimensions.x/2)
-        //         {
-        //             camera_view.target = Vector2Add(camera_view.target, Vector2Scale(player1->direction, player1->speed * delta_time));
-        //         }
-        //         if(camera_view.target.y - player1->position.y + 10 >= cameraBoxDimensions.y/2 || camera_view.target.y - player1->position.y - 10 <= -cameraBoxDimensions.y/2)
-        //         {
-        //             camera_view.target = Vector2Add(camera_view.target, Vector2Scale(player1->direction, player1->speed * delta_time));
-        //         }
-        //     }
-        //     else
-        //     {
-        //         camera_view.target = Vector2Add(camera_view.target, Vector2Scale(Vector2Normalize(Vector2Subtract(player1->position, camera_view.target)), 10 * delta_time));
-        //     }
-        // }
-
         // UPDATE
         for(int i=0; i<entities.size(); i++)
         {
@@ -231,11 +216,11 @@ public:
             }
         }
 
-        // SET CAMERA DRIFT
-        // if(player1->velocity.x == 0 && player1->velocity.y == 0 && Vector2Length(Vector2Subtract(player1->position, camera_view.target)) >= 5.0f)
-        // {
-        //     camera_view.target = Vector2Add(camera_view.target, Vector2Scale(Vector2Scale(Vector2Normalize(Vector2Subtract(player1->position, camera_view.target)), player1->speed * 0.90), delta_time));
-        // }
+        // UPDATE HP BAR
+        hp_bar = {10.0f, 10.0f, player1->hp, 16.0f};
+        boss_hp_bar = {100.0f, WINDOW_HEIGHT - 32.0f, (entities[1]->hp / boss_hp_max) * (WINDOW_WIDTH-200.0f), 16.0f};
+
+        ui_library.Update();
     }
 
     void Draw() override
@@ -256,6 +241,15 @@ public:
                 entities[i]->Draw();
             }
         EndMode2D();
+
+        // DRAW PLAYER UI
+        DrawRectangleRec(hp_container, {0, 0, 0, 75});
+        DrawRectangleRec(hp_bar, RED);
+
+        // DRAW BOSS UI
+        DrawRectangleRec(boss_hp_cont, {0, 0, 0, 75});
+        DrawRectangleRec(boss_hp_bar, RED);
+        DrawText(entities[1]->nme.c_str(), 100.0f, WINDOW_HEIGHT - 50.0f, 20.0f, RAYWHITE);
             
         if(toggle_bounds)
         {
@@ -285,6 +279,8 @@ public:
                 DrawText(sc.c_str(), (WINDOW_WIDTH/2 - (MeasureText(sc.c_str(), 50))/2), (WINDOW_HEIGHT/2) + 100, 50, BLACK);
             }
         }
+
+        ui_library.Draw();
     }
 
 private:
@@ -316,6 +312,7 @@ private:
     std::vector<Enemy*> enemy_list;
     bool enemy_alive = false;
     bool player_colliding = false;
+    float base_dmg;
 
     // LOOP COUNTERS
     int game_state = 0;
@@ -341,6 +338,15 @@ private:
 
     // SET MUSIC
     Music bgMusic;
+
+    // PLAYER UI
+    Rectangle hp_container, hp_bar;
+
+    // BOSS UI
+    Rectangle boss_hp_cont, boss_hp_bar;
+    float boss_hp_max;
+
+    UILibrary ui_library;
 
 
     // UTILS
@@ -715,45 +721,22 @@ private:
 
     void SaveLoader(std::string savefile)
     {
-        entities.clear();
         std::string filename = savefile;
-        std::string entity_count_str, entity_values;
+        std::string entity_values;
         std::vector<std::string> to_split;
-        int entity_count = 0;
 
-        std::fstream MyReadFile(filename);
-            getline(MyReadFile, entity_count_str);
-            entity_count = std::stoi(entity_count_str);
-
-            for(int i=0; i<entity_count; i++)
+        std::fstream MyReadFile;
+        MyReadFile.open(filename);
+            if(MyReadFile.fail())
             {
-                getline(MyReadFile, entity_values);
-                to_split = StringSplit(entity_values);
-                
-                if(to_split[0] == "Player")
-                {
-                    player1 = new Player({std::stof(to_split[1]), std::stof(to_split[2])}, std::stof(to_split[3]), std::stof(to_split[4]), std::stof(to_split[5]), std::stof(to_split[6]), std::stof(to_split[7]), &entities);
-                    entities.push_back(player1);
-                }
-                if(to_split[0] == "Enemy")
-                {
-                    Enemy* enemy = new Enemy(to_split[1], {std::stof(to_split[2]), std::stof(to_split[3])}, {std::stof(to_split[4]), std::stof(to_split[5])}, std::stof(to_split[6]), std::stof(to_split[7]), std::stof(to_split[8]), std::stof(to_split[9]), std::stof(to_split[10]), std::stof(to_split[11]), &entities);
-                    entities.push_back(enemy);
-                }
-                if(to_split[0] == "Item")
-                {
-                    if(to_split[1] == "HP")
-                    {
-                        HP_Item* item1 = new HP_Item(to_split[2], {std::stof(to_split[3]), std::stof(to_split[4])}, std::stof(to_split[5]), std::stof(to_split[6]), &entities);
-                        entities.push_back(item1);
-                    }
-                    if(to_split[1] == "ATK")
-                    {
-                        ATK_Item* item2 = new ATK_Item(to_split[2], {std::stof(to_split[3]), std::stof(to_split[4])}, std::stof(to_split[5]), std::stof(to_split[6]), &entities);
-                        entities.push_back(item2);
-                    }
-                }
-            }        
+                std::cout << "No Save File detected." << std::endl;
+                return;
+            }
+            getline(MyReadFile, entity_values);
+            to_split = StringSplit(entity_values);
+
+            player1->hp = std::stof(to_split[0]);
+            player1->basic_dmg = std::stof(to_split[1]);
         MyReadFile.close();
     }
 
@@ -767,53 +750,13 @@ private:
     }
 
     // FILE MODIFIERS
-    void SaveProgress(int n_entity)
+    void SaveProgress()
     {
         std::cout << "CLOSE" << std::endl;
-        std::ofstream outfile("/saves/save.txt");
-        std::string entity_data = std::to_string(n_entity) + "\n";
+        std::ofstream outfile("saves/save.txt");
+        std::string entity_data;
 
-        for(int i=0; i<entities.size(); i++)
-        {
-            if(entities[i]->entity_type == "Player")
-            {
-                entity_data += entities[i]->entity_type + " "
-                            + std::to_string(player1->position.x) + " "
-                            + std::to_string(player1->position.y) + " "
-                            + std::to_string(player1->radius) + " "
-                            + std::to_string(player1->speed) + " "
-                            + std::to_string(player1->hp) + " "
-                            + std::to_string(player1->basic_dmg) + " "
-                            + std::to_string(player1->atk_rad) + "\n";
-            }
-            if(entities[i]->entity_type == "Enemy")
-            {
-                // entity_data += entities[i]->entity_type + " "
-                //             + enemy_list[i-1]->name + " "
-                //             + std::to_string(enemy_list[i-1]->position.x) + " "
-                //             + std::to_string(enemy_list[i-1]->position.y) + " "
-                //             + std::to_string(enemy_list[i-1]->size.x) + " "
-                //             + std::to_string(enemy_list[i-1]->size.y) + " "
-                //             + std::to_string(enemy_list[i-1]->speed) + " "
-                //             + std::to_string(enemy_list[i-1]->hp) + " "
-                //             + std::to_string(enemy_list[i-1]->basic_dmg) + " "
-                //             + std::to_string(enemy_list[i-1]->detection_rad) + " "
-                //             + std::to_string(enemy_list[i-1]->aggro_rad) + " "
-                //             + std::to_string(enemy_list[i-1]->attack_rad) + "\n";
-            }
-            if(entities[i]->entity_type == "Item")
-            {
-                std::string name = (entities[i]->basic_dmg == 10.0f) ? "HP" : "ATK";
-                
-                entity_data += entities[i]->entity_type + " "
-                            + name + " " 
-                            + std::to_string(entities[i]->position.x) + " "
-                            + std::to_string(entities[i]->position.y) + " "
-                            + std::to_string(entities[i]->size.y) + " "
-                            + std::to_string(entities[i]->hp) + " "
-                            + std::to_string(entities[i]->basic_dmg) + "\n";
-            }
-        }
+        entity_data = std::to_string(hp_container.width) + " " + std::to_string(base_dmg);
 
         outfile << entity_data;
         outfile.close();

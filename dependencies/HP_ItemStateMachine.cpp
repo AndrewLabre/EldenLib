@@ -59,6 +59,7 @@ HP_ItemState* HP_Item::GetState() {
     return current_state;
 }
 HP_Item::HP_Item(std::string i, Vector2 pos, float rad, float h, std::vector<Entity*>* ent) {
+    nme = i;
     name = i;
     position = pos;
     radius = rad;

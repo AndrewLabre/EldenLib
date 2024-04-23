@@ -9,6 +9,7 @@
 
 class Entity {
 public:
+    std::string nme;
     Vector2 position;
     Vector2 previousPosition;
     Vector2 size;

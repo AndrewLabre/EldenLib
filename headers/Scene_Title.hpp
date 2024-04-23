@@ -77,10 +77,10 @@ public:
             
         ui_library.root_container.bounds = { 10.0f, 10.0f, 1080.0f, 620.0f };
 
-        std::unique_ptr<Button> Start = std::make_unique<Button>();
+        Start = std::make_unique<Button>();
         Start->text = "START";
-        Start->width = 100.0f;
-        Start->bounds = { (GetScreenWidth()/2.0f)-50.0f, (GetScreenHeight()/2.0f)+64.0f, 100.0f, 50.0f };
+        Start->width = 120.0f;
+        Start->bounds = { (GetScreenWidth()/2.0f)-60.0f, (GetScreenHeight()/2.0f)+64.0f, 120.0f, 50.0f };
         Start->customClickHandler = [this]()
         {
             if (GetSceneManager() != nullptr)
@@ -90,23 +90,23 @@ public:
         };
         ui_library.root_container.AddChild(Start.release());
 
-        std::unique_ptr<Button> Settings = std::make_unique<Button>();
-        Settings->text = "SETTINGS";
-        Settings->width = 120.0f;
-        Settings->bounds = { GetScreenWidth()/2.0f-60.0f, (GetScreenHeight()/2.0f+GetScreenHeight()/8.0f)+64.0f, 120.0f, 50.0f };
-        Settings->customClickHandler = [this]()
+        Settings_Button = std::make_unique<Button>();
+        Settings_Button->text = "SETTINGS";
+        Settings_Button->width = 120.0f;
+        Settings_Button->bounds = { GetScreenWidth()/2.0f-60.0f, (GetScreenHeight()/2.0f)+128.0f, 120.0f, 50.0f };
+        Settings_Button->customClickHandler = [this]()
         {
             if (GetSceneManager() != nullptr)
             {
                 GetSceneManager()->SwitchScene(1);
             }
         };
-        ui_library.root_container.AddChild(Settings.release());
+        ui_library.root_container.AddChild(Settings_Button.release());
 
-        std::unique_ptr<Button> Exit = std::make_unique<Button>();
+        Exit = std::make_unique<Button>();
         Exit->text = "EXIT";
-        Exit->width = 100.0f;
-        Exit->bounds = { GetScreenWidth()/2.0f-50.0f, (GetScreenHeight()/2.0f+GetScreenHeight()/8.0f)+139.0f, 100.0f, 50.0f };
+        Exit->width = 120.0f;
+        Exit->bounds = { GetScreenWidth()/2.0f-60.0f, (GetScreenHeight()/2.0f)+192.0f, 120.0f, 50.0f };
         Exit->customClickHandler = [this]()
         {
             exit_scene = true;
@@ -130,6 +130,7 @@ public:
 
     void End() override
     {
+        //ui_library.root_container.DeleteChild();
         UnloadMusicStream(bgMusic);
         UnloadMusicStream(bgMusic2);
         // CloseAudioDevice();
@@ -199,6 +200,11 @@ private:
 
     Label Title;
     Label Title2;
+
+    std::unique_ptr<Button> Start;
+    std::unique_ptr<Button> Settings_Button;
+    std::unique_ptr<Button> Exit;
+
 
     bool setAudio, setAudio2;
 
