@@ -100,19 +100,12 @@ void Amogus::Draw() {
     // DrawCircleLines(position.x + size.x/2, position.y + size.y/2, aggro_rad, RED);
     // DrawCircleLines(position.x + size.x/2, position.y + size.y/2, attack_rad, YELLOW);
 
-    DrawText(name.c_str(), 0.0f, 0.0f, 20.0f, RED);
+    DrawText(name.c_str(), position.x - (MeasureText(name.c_str(), 20.0f) / 2.0f), position.y + size.y + 10.0f, 20.0f, color);
 
     std::stringstream enemy_healthstream;
     enemy_healthstream << std::fixed << std::setprecision(2) << hp;
     std::string enemy_health = enemy_healthstream.str();
-    DrawText(enemy_health.c_str(), 0.0f, 20.0f, 20.0f, RED);
-
-    // DrawText(name.c_str(), position.x - (MeasureText(name.c_str(), 20.0f) / 2.0f), position.y + size.y + 10.0f, 20.0f, RED);
-
-    // std::stringstream enemy_healthstream;
-    // enemy_healthstream << std::fixed << std::setprecision(2) << hp;
-    // std::string enemy_health = enemy_healthstream.str();
-    // DrawText(enemy_health.c_str(), position.x - (MeasureText(enemy_health.c_str(), 20.0f) / 2.0f), position.y - 20.0f, 20.0f, RED);
+    DrawText(enemy_health.c_str(), position.x - (MeasureText(enemy_health.c_str(), 20.0f) / 2.0f), position.y - 20.0f, 20.0f, color);
 
     //Draw Texture
     Rectangle bigger_rectangle = {position.x - size.x/2, position.y - size.y/2, size.x*2, size.y*2};
@@ -156,6 +149,8 @@ void Amogus::TakeDmg() {
         hp -= incoming_dmg;
         iFrameTimer = iFrames;
     }
+
+    PlaySoundInList(3);
 }
 Amogus::Amogus(std::string i, Vector2 pos, Vector2 s, float spd, float h, float dmg, float det, float agg, float atk, std::vector<Entity*>* ent) {
     name = i;
@@ -169,6 +164,12 @@ Amogus::Amogus(std::string i, Vector2 pos, Vector2 s, float spd, float h, float 
     attack_rad = atk;
     entities = ent;
     entity_type = "Enemy";
+
+    AddSound("sounds/amogus/amogus-footsteps-sound.wav");
+    AddSound("sounds/amogus/amogus-readying1-sound.wav");
+    AddSound("sounds/amogus/amogus-attack-sound.wav");
+    AddSound("sounds/amogus/amogus-death1-sound.wav");
+
     SetState(&wandering);
 }
 
@@ -191,6 +192,8 @@ void AmogusChasing::Enter(Amogus& enemy) {
     enemy.animation_timer = 0.0f;
     enemy.animation_index = 1;
     enemy.animation_frame = 0;
+
+    enemy.PlaySoundInList(0);
 }
 void AmogusChasing2::Enter(Amogus& enemy) {
     enemy.color = Fade(enemy.color, 0.02f);
@@ -207,6 +210,8 @@ void AmogusReadying::Enter(Amogus& enemy) {
     enemy.animation_index = 5;
     enemy.animation_timer = 0.0f;
     enemy.animation_frame = 0;
+
+    enemy.PlaySoundInList(1);
 }
 void AmogusAttacking::Enter(Amogus& enemy) {
     enemy.color = WHITE;
@@ -216,6 +221,8 @@ void AmogusAttacking::Enter(Amogus& enemy) {
     enemy.animation_timer = 0.0f;
     enemy.animation_frame = 0;
     enemy.animation_frame_timer = 0.07f;
+
+    enemy.PlaySoundInList(2);
 }
 
 // UPDATE
